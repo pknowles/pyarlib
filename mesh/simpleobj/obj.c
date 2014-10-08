@@ -101,6 +101,8 @@ void freeArray(ReallocArray* array)
 unsigned int getFileSize(const char* filename)
 {
 	FILE* f = fopen(filename, "r");
+	if (!f)
+		return 0;
 	fseek(f, 0, SEEK_END);
 	unsigned int size = ftell(f);
 	fclose(f);
@@ -273,14 +275,6 @@ OBJMesh* objMeshLoad(const char* filename)
 	int fatalError = 0;
 	int useHash = 1;
 	
-	#ifndef ENVIRONMENT64BIT
-	if (getFileSize(filename) > 512*1024*1024)
-	{
-		useHash = 0; //don't use the hash for large files on a 32 bit system
-		printf("OBJMesh: Not using hash. File too big.\n");
-	}
-	#endif
-	
 	//external files referenced by filename should have filepath appended
 	char* filepath = getFilepath(filename);
 	
@@ -293,6 +287,14 @@ OBJMesh* objMeshLoad(const char* filename)
 		perror(filename);
 		return NULL;
 	}
+	
+	#ifndef ENVIRONMENT64BIT
+	if (getFileSize(filename) > 512*1024*1024)
+	{
+		useHash = 0; //don't use the hash for large files on a 32 bit system
+		printf("OBJMesh: Not using hash. File too big.\n");
+	}
+	#endif
 	
 	//the mesh we're going to return
 	OBJMesh* mesh = (OBJMesh*)malloc(sizeof(OBJMesh));
