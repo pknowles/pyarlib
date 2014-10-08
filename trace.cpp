@@ -1001,7 +1001,7 @@ bool TraceScene::hitSurface(vec4f& colour, Ray& ray, HitInfo& hitInfo, TraceStac
 	float eta = hitInfo.backface ? material->index : 1.0f/material->index;
 	
 	//a normal always opposite the direction of the ray
-	const vec3f& facingNormal = hitInfo.backface?-normal:normal;
+	//const vec3f& facingNormal = hitInfo.backface?-normal:normal;
 
 	//child rays will copy the current ray. initialize some common attibs
 	if (hitInfo.time > 0.0000001f && ray.start != hitInfo.pos)

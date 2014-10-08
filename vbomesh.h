@@ -14,7 +14,7 @@ struct InterleavedEditor
 	int offset, stride;
 	void* data;
 	InterleavedEditor() {data=NULL;offset=0;stride=sizeof(T);}
-	InterleavedEditor(int offset, int stride, void* data) : offset(offset), stride(stride), data(data) {}
+	InterleavedEditor(int noffset, int nstride, void* ndata) : offset(noffset), stride(nstride), data(ndata) {}
 	T& operator[](intptr_t index) {return *(T*)((char*)data+(offset+stride*index));}
 	operator bool() const {return data != NULL;}
 };

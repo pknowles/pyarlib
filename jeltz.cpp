@@ -771,7 +771,7 @@ void Jeltz::doResize(int width, int height)
 	windowedSize.x = width;
 	windowedSize.y = height;
 
-	bool maximized = (desktopRes == windowedSize);
+	//bool maximized = (desktopRes == windowedSize);
 	bool nearMaxSize = (desktopRes.x - windowedSize.x < 16) && (desktopRes.y - windowedSize.y < 64);
 
 	if (debugEvents)

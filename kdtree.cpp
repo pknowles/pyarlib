@@ -12,7 +12,7 @@ using namespace std;
 static float* sortPoints;
 static int axis;
 static int sortK;
-static const bool comparePoints(const int a, const int b)
+static bool comparePoints(const int a, const int b)
 {
 	return sortPoints[a*sortK+axis] < sortPoints[b*sortK+axis];
 }
