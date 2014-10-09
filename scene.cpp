@@ -119,6 +119,8 @@ Scene::Scene()
 	guiElements["delkey"]->capture(QG::CLICK, Scene::_delKey, this);
 	guiElements["save"]->capture(QG::CLICK, Scene::_saveFlythrough, this);
 	guiElements["ratio"]->width = 200;
+	
+	//debug sphere
 	sphere = new VBOMesh();
 	*sphere = VBOMesh::grid(vec2i(32), VBOMesh::paramSphere);
 	sphere->transform(mat44::scale(0.01f));
@@ -403,6 +405,8 @@ void Scene::init()
 	widget[1]->upload();
 	widget[2]->upload();
 	cameraIcon->upload();
+	
+	sphere->upload();
 	
 	std::set<std::string> modeltypes;
 	modeltypes.insert("obj");

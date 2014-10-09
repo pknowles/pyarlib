@@ -436,7 +436,7 @@ bool Jeltz::init()
 	sigaction(SIGINT, NULL, &afterSIGINT);
 	if (beforeSIGINT.sa_handler != afterSIGINT.sa_handler || beforeSIGINT.sa_sigaction != afterSIGINT.sa_sigaction)
 	{
-		printf("Overriding SDL's retarded attempt to steal SIGINT (%p,%p)->(%p,%p)\n", beforeSIGINT.sa_handler, beforeSIGINT.sa_sigaction, afterSIGINT.sa_handler, afterSIGINT.sa_sigaction);
+		//printf("Overriding SDL's retarded attempt to steal SIGINT (%p,%p)->(%p,%p)\n", beforeSIGINT.sa_handler, beforeSIGINT.sa_sigaction, afterSIGINT.sa_handler, afterSIGINT.sa_sigaction);
 		sigaction(SIGINT, &beforeSIGINT, NULL);
 	}
 #endif
