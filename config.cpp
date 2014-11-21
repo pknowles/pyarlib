@@ -33,6 +33,8 @@ Config::Config()
 		int len = RESOURCELEN(defaultConfig);
 		if (len > 0)
 		{
+			cout << "Note: Config file " << CONFIG_NAME << " does not exist. A default one is being created." << endl;
+
 			ofstream ofile(CONFIG_NAME);
 			//printf("%i %s\n", len, RESOURCE(defaultConfig));
 			ofile.write(RESOURCE(defaultConfig), len);

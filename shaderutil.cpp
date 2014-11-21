@@ -10,6 +10,8 @@
 
 #include "shader.h"
 
+#include <GL/glew.h>
+
 const char* getFormatString(GLenum format)
 {
 	switch (format)

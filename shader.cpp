@@ -642,7 +642,7 @@ void Shader::fillLocations()
 		//	printf("%s %i %i %i\n", name, loc, varSize, varType);
 	}
 	
-	GLint inShaderStage[3];
+	GLint inShaderStage[12]; //should be 3 but get a stack corruption
 	GLint numUniformBlocks;
 	glGetProgramiv(program, GL_ACTIVE_UNIFORM_BLOCKS, &numUniformBlocks);
 	for (int i = 0; i < numUniformBlocks; ++i)
