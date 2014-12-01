@@ -453,8 +453,8 @@ Scene::Object Scene::parseObject(pugi::xml_node object)
 		scale = vec3f(1.0f);
 		
 	Object obj;
-	obj.unlit = object.attribute("unlit").as_int();
-	obj.backface = object.attribute("backface").as_int();
+	obj.unlit = object.attribute("unlit").as_int() > 0;
+	obj.backface = object.attribute("backface").as_int() > 0;
 	obj.transform = mat44::translate(pos) * mat44::scale(scale) * mat44::rotate(rot);
 	
 	if (!getMesh(meshName, obj.mesh))
@@ -750,7 +750,7 @@ void Scene::load(std::string filename)
 		if (viewData.size())
 		{
 			views.push_back(View());
-			views.back().scale = view.attribute("scale").as_int();
+			views.back().scale = view.attribute("scale").as_int() > 0;
 			views.back().name = view.attribute("name").value();
 			views.back().data = viewData;
 			views.back().focus = view.attribute("focus").as_float();
@@ -1159,7 +1159,7 @@ void Scene::trace(std::string filename)
 	camera->regen();
 	tracer->dof.aperture = camera->aperture;
 	tracer->dof.focus = camera->focus;
-	tracer->dof.samples = pow(vp.w * camera->getNearSize().y / tracer->dof.aperture, 2.0);
+	tracer->dof.samples = pow(vp.w * camera->getNearSize().y / tracer->dof.aperture, 2.0f);
 	printf("Samples: %i\n", tracer->dof.samples);
 	tracer->dof.samples = mymin(tracer->dof.samples, 256);
 	

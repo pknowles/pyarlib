@@ -38,6 +38,7 @@ int ipow(int base, int exp)
     return result;
 }
 
+/*
 #ifdef _WIN32
 #ifndef log2
 float log2(float x)
@@ -52,6 +53,7 @@ double log2(double x)
 }
 #endif
 #endif
+*/
 
 int ilog10(int x)
 {

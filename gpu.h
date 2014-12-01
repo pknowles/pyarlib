@@ -8,6 +8,7 @@
 
 #ifdef _WIN32
 #include <memory>
+#include <stdint.h>
 #else
 #include <tr1/memory>
 #endif

@@ -9,6 +9,12 @@
 #include <math.h>
 #include <time.h>
 
+#ifdef _WIN32
+#include <stdint.h>
+#else
+#include <inttypes.h>
+#endif
+
 #include "vec.h"
 
 #define UNIT_RAND (rand()/(float)RAND_MAX)
@@ -17,10 +23,12 @@ extern const float pi;
 
 #ifdef _WIN32
 #include <windows.h> //phhhhiwiuhwyas
-#ifndef log2
+/*
+#if __cplusplus <= 199711L //less than c++11 (afaik)
 float log2(float x);
 double log2(double x);
 #endif
+*/
 #endif
 
 bool isBigEndian();

@@ -33,7 +33,9 @@ Config::Config()
 		int len = RESOURCELEN(defaultConfig);
 		if (len > 0)
 		{
-			ofstream ofile(CONFIG_NAME);
+			cout << "Note: Config file " << CONFIG_NAME << " does not exist. A default one is being created." << endl;
+
+			ofstream ofile(CONFIG_NAME, ios::binary);
 			//printf("%i %s\n", len, RESOURCE(defaultConfig));
 			ofile.write(RESOURCE(defaultConfig), len);
 			ofile.close();

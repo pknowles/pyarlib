@@ -12,7 +12,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
+
+#ifdef _WIN32
+#include <stdint.h>
+#else
 #include <inttypes.h>
+#endif
 
 #include "shader.h"
 #include "shaderutil.h"

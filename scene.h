@@ -12,7 +12,7 @@
 #include "vec.h"
 #include "camera.h"
 
-class VBOMesh;
+struct VBOMesh;
 class Shader;
 
 namespace pugi { class xml_node; }

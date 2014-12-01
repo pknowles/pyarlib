@@ -6,6 +6,10 @@
 
 class Profiler;
 
+#ifdef _WIN32
+#define explicit //FIXME: really dirty hack for visual studio :(
+#endif
+
 class Benchmark
 {
 public:

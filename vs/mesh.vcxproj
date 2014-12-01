@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C0363093-1174-4968-A300-928E93FC061C}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>mesh</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IntDir>mesh\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IntDir>mesh\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <UndefinePreprocessorDefinitions>
+      </UndefinePreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\mesh\lib3ds\lib3ds.h" />
+    <ClInclude Include="..\mesh\lib3ds\lib3ds_impl.h" />
+    <ClInclude Include="..\mesh\openctm\Alloc.h" />
+    <ClInclude Include="..\mesh\openctm\internal.h" />
+    <ClInclude Include="..\mesh\openctm\LzFind.h" />
+    <ClInclude Include="..\mesh\openctm\LzHash.h" />
+    <ClInclude Include="..\mesh\openctm\LzmaDec.h" />
+    <ClInclude Include="..\mesh\openctm\LzmaEnc.h" />
+    <ClInclude Include="..\mesh\openctm\LzmaLib.h" />
+    <ClInclude Include="..\mesh\openctm\NameMangle.h" />
+    <ClInclude Include="..\mesh\openctm\openctm.h" />
+    <ClInclude Include="..\mesh\openctm\openctmpp.h" />
+    <ClInclude Include="..\mesh\openctm\Types.h" />
+    <ClInclude Include="..\mesh\simpleobj\obj.h" />
+    <ClInclude Include="..\mesh\simpleobj\uthash.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_atmosphere.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_background.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_camera.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_chunk.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_chunktable.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_file.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_io.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_light.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_material.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_math.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_matrix.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_mesh.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_node.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_quat.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_shadow.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_track.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_util.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_vector.c" />
+    <ClCompile Include="..\mesh\lib3ds\lib3ds_viewport.c" />
+    <ClCompile Include="..\mesh\openctm\Alloc.c" />
+    <ClCompile Include="..\mesh\openctm\compressMG1.c" />
+    <ClCompile Include="..\mesh\openctm\compressMG2.c" />
+    <ClCompile Include="..\mesh\openctm\compressRAW.c" />
+    <ClCompile Include="..\mesh\openctm\LzFind.c" />
+    <ClCompile Include="..\mesh\openctm\LzmaDec.c" />
+    <ClCompile Include="..\mesh\openctm\LzmaEnc.c" />
+    <ClCompile Include="..\mesh\openctm\LzmaLib.c" />
+    <ClCompile Include="..\mesh\openctm\openctm.c" />
+    <ClCompile Include="..\mesh\openctm\stream.c" />
+    <ClCompile Include="..\mesh\simpleobj\obj.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
