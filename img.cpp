@@ -147,15 +147,17 @@ void Image::bufferTexture(unsigned int object, unsigned long target)
 	glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data.get());
 	glBindTexture(bindTarget, 0);
 }
-void Image::readTexture(unsigned int id)
+void Image::readTexture(unsigned int id, int mipLevel)
 {
 	glBindTexture(GL_TEXTURE_2D, id);
 
 	int nwidth, nheight;
 	int internalFormat;
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &nwidth);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &nheight);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &internalFormat);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, mipLevel, GL_TEXTURE_WIDTH, &nwidth);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, mipLevel, GL_TEXTURE_HEIGHT, &nheight);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, mipLevel, GL_TEXTURE_INTERNAL_FORMAT, &internalFormat);
+	
+	//printf("%i %i %i\n", nwidth, nheight, internalFormat);
 
 	int nchannels;
 	bool depth = false;
@@ -216,7 +218,7 @@ void Image::readTexture(unsigned int id)
 	if (depth)
 		format = GL_DEPTH_COMPONENT;
 
-	glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, data.get());
+	glGetTexImage(GL_TEXTURE_2D, mipLevel, format, GL_UNSIGNED_BYTE, data.get());
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 void Image::resize(int w, int h, int nchannels)

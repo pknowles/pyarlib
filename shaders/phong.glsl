@@ -168,7 +168,10 @@ vec4 phong()
 			specPower = texture(texSpecular, coord).g * 255.0;
 	}
 
-	fragColour = ((textured & 1) != 0) ? texture(texColour, coord) : vec4(1.0);
+	#ifndef DIFFUSE_COLOUR
+	#define DIFFUSE_COLOUR ((textured & 1) != 0) ? texture(texColour, coord) : vec4(1.0)
+	#endif
+	fragColour = DIFFUSE_COLOUR;
 	fragColour.a *= colourIn.a;
 	
 	if (unlit == 0)

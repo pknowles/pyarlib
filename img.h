@@ -41,7 +41,7 @@ namespace QI
 		void generateChecker(unsigned char a = 0, unsigned char b = 255);
 		unsigned int bufferTexture(); //returns new GL texture
 		void bufferTexture(unsigned int object, unsigned long target = -1); //buffers to object
-		void readTexture(unsigned int id);
+		void readTexture(unsigned int id, int mipLevel = 0);
 		void resize(int w, int h, int nchannels = 0); //clears old image!
 		void genHostMipmap(const Image& src); //generates an image based on the src image
 	};

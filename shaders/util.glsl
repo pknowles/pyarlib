@@ -1,4 +1,8 @@
 
+#ifndef UTIL_H
+#define UTIL_H
+
+
 uint rgba8ToUInt(vec4 c)
 {
 	uvec4 i =clamp(uvec4(c * 255.0), 0, 255);
@@ -63,3 +67,5 @@ vec3 debugColLog(int i)
 	return vec3(0.5, 0.5, 0.5);
 }
 
+
+#endif

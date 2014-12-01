@@ -346,7 +346,7 @@ void Widget::_add(Widget* w)
 	w->Z = Z;
 	w->setDirty();
 	
-	w->hide(hidden);
+	w->hide(hidden || w->hidden);
 }
 void Widget::_rem(Widget* w)
 {

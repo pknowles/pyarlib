@@ -103,6 +103,7 @@ Scene::Scene()
 	splineIntegrateSteps = 200;
 	editTransform = mat44::identity();
 	controls = new QG::Widget;
+	controls->hide(); //start hidden until edit mode is enabled
 	controls->add(guiElements["add"] = new QG::DropDown("Add Model"));
 	controls->add(guiElements["flythrough"] = new QG::Slider("Flythrough", 0, 0));
 	controls->add(guiElements["frames"] = new QG::Slider("Keyframes", 0, 0));
@@ -1206,6 +1207,7 @@ void Scene::add(std::string modelname)
 void Scene::edit(bool enable)
 {
 	editMode = enable;
+	controls->hide(!enable);
 }
 int Scene::getNumViews()
 {
@@ -1234,15 +1236,20 @@ void Scene::setView(int i)
 	
 	float camScale = views[i].scale ? globalScale : 1.0f;
 	stringstream(views[i].data) >> *camera;
-	camera->setDistance(0.01f, 100.0f);
+	
+	if (camera->isPerspective())
+	{
+		camera->setDistance(0.01f, 100.0f); //not sure I want to overwrite this
+	
+		float fov = views[i].fov*pi/180.0f;
+		if (fov > 0.0f && fov < pi)
+			camera->setFOV(fov);
+		else
+			camera->setFOV(CAMERA_DEFAULT_FOV);
+	}
+	
 	camera->scale(camScale);
 	camera->focus = views[i].focus * camScale;
-	
-	float fov = views[i].fov*pi/180.0f;
-	if (fov > 0.0f && fov < pi)
-		camera->setFOV(fov);
-	else
-		camera->setFOV(CAMERA_DEFAULT_FOV);
 		
 	camera->aperture = views[i].aperture;
 	

@@ -290,8 +290,14 @@ void Texture::unbind() const
 void Texture::genMipmap()
 {
 	bind();
-	if (mipmap)
-		glGenerateMipmap(type);
+	if (!mipmap)
+	{
+		printf("Warning: Texture::genMipmap() called but mipmap not set. Fixing.\n");
+		mipmap = true;
+		applyAttribs(type);
+	}
+	glGenerateMipmap(type);
+	CHECKERROR;
 	unbind();
 }
 int Texture::getMipmapLevels()

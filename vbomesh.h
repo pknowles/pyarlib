@@ -136,8 +136,8 @@ struct VBOMesh : public Loader<VBOMesh>
 	static VBOMesh grid(vec2i size, void (*param)(const vec2f&, vec3f&, vec3f&, vec2f&)); //out args vert, norm, tex
 	static VBOMesh grid(vec2i size, void (*param)(const vec2f&, vec3f&, vec3f&, vec3f&)); //out args vert, norm, tangent
 	static VBOMesh grid(vec2i size, void (*param)(const vec2f&, vec3f&, vec3f&, vec2f&, vec3f&) = paramPlane); //out args vert, norm, tex, tangent
-	static VBOMesh cube(float size = 1.0f);
-	static VBOMesh cubeWire(float size = 1.0f);
+	static VBOMesh cube(float size = 2.0f);
+	static VBOMesh cubeWire(float size = 2.0f);
 	static VBOMesh quad();
 };
 
