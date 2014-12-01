@@ -21,6 +21,7 @@ JeltzFly::JeltzFly()
 	camera.setDistance(0.01f, 100.0f);
 	camera.regen();
 	
+	target = NULL;
 	sensitivity = 0.5;
 	speed = 1.0;
 	interpolating = false;
@@ -36,6 +37,8 @@ JeltzFly::~JeltzFly()
 }
 void JeltzFly::update(float dt)
 {
+	Camera& camera = target ? *target : this->camera;
+
 	bool moved = false;
 	float mspeed = speed;
 	
@@ -207,8 +210,8 @@ void JeltzFly::update(float dt)
 	//update projection aspect ratio if window resized
 	if (jeltz->resized())
 	{
-		camera.setAspectRatio(jeltz->winSize().x/(float)jeltz->winSize().y);
-		camera.regenProjection();
+		this->camera.setAspectRatio(jeltz->winSize().x/(float)jeltz->winSize().y);
+		this->camera.regenProjection();
 	}
 }
 void JeltzFly::loadCamera(std::string filename)

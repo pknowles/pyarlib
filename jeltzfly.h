@@ -27,6 +27,7 @@ public:
 	float sensitivity;
 	float speed;
 	Camera camera; //the public camera class. usage eg: glLoadMatrixf(jeltzFly.camera.getInverse().m);
+	Camera* target; //leave NULL to target camera. Otherwise input controls the target instead.
 	JeltzFly();
 	virtual ~JeltzFly();
 	void loadCamera(std::string filename = ".camera.txt");
