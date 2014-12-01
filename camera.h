@@ -61,6 +61,8 @@ public:
 	void copyProjection(const Camera& other);
 	void setAspectRatio(float r);
 	void setDistance(float n, float f);
+	void setClipPlanes(float near, float far);
+	void setClipPlanes(vec2f nearFar);
 	void setPerspective(float a);
 	void setOrthographic(float s);
 	void setPosition(const vec3f& pos);
@@ -84,6 +86,8 @@ public:
 	const vec3f getEuler();
 	float getFOVY() const;
 	float getFOVX() const; //taking into account aspect ratio
+	bool isOrthographic() const {return !bPerspective;}
+	bool isPerspective() const {return bPerspective;}
 	vec2f getNearSize() const;
 	vec3f getZoomPos();
 	vec2f getClipPlanes() const;

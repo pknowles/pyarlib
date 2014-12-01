@@ -170,8 +170,16 @@ void Camera::setAspectRatio(float r)
 }
 void Camera::setDistance(float n, float f)
 {
-	nearPlane = n;
-	farPlane = f;
+	setClipPlanes(n, f);
+}
+void Camera::setClipPlanes(float near, float far)
+{
+	nearPlane = near;
+	farPlane = far;
+}
+void Camera::setClipPlanes(vec2f nearFar)
+{
+	setClipPlanes(nearFar.x, nearFar.y);
 }
 void Camera::setPerspective(float a)
 {
@@ -313,8 +321,13 @@ float Camera::getFOVX() const
 }
 vec2f Camera::getNearSize() const
 {
-	float tanfov = tan(fov*0.5f);
-	return vec2f(nearPlane * tanfov, nearPlane * tanfov * aspect);
+	if (bPerspective)
+	{
+		float tanfov = 2.0f*tan(fov*0.5f);
+		return vec2f(nearPlane * tanfov * aspect, nearPlane * tanfov);
+	}
+	else
+		return vec2f(size * aspect, size);
 }
 vec3f Camera::getZoomPos()
 {
