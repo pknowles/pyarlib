@@ -38,6 +38,7 @@ struct ShaderBuild
 	//map of #define values to substitute
 	typedef std::map<std::string, std::string> Defines;
 	Defines defines;
+	Defines existingDefines;
 
 	//map of objects, eg GL_VERTEX_SHADER = <loaded/compiled shader>
 	typedef std::map<GLenum, ShaderSource> ObjectMap;

@@ -145,6 +145,7 @@ bool readFile(std::string& str, const char* filename)
 
 bool readUncomment(std::istream& stream, std::string& line)
 {
+	//FIXME: does not handle "strings with //comments" or 'literals/*such as this'
 	static bool commentBlock = false;
 	if (!getline(stream, line))
 		return false;
@@ -193,5 +194,14 @@ bool readUncomment(std::istream& stream, std::string& line)
 	bool done = !stream.good();
 	if (done) commentBlock = false;
 	return true;
+}
+
+std::string stripComments(const std::string& text)
+{
+	std::stringstream str(text), out;
+	std::string line;
+	while (readUncomment(str, line))
+		out << line;
+	return out.str();
 }
 

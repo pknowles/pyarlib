@@ -219,6 +219,14 @@ int nextPowerOf2(int x)
 	return x;
 }
 
+int resizeWithinFactor(int x, int y, float f)
+{
+	assert(f >= 1.0f);
+	if (x < y / (f * f) || x > y)
+		return (int)(x * f);
+	return y;
+}
+
 int ceil(const int& n, const int& d)
 {
 	return n / d + (n % d > 0 ? 1 : 0);

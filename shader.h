@@ -121,6 +121,7 @@ public:
 	static int globalCompileError; //if any shader failed to compile. used to stop GL errors flooding output
 	std::string lastAutoExposeAs;
 	static Shader* active;
+	ShaderBuild::Defines existingDefines;
 	
 	static SetType getUniformSetType(GLint type);
 
@@ -152,6 +153,8 @@ public:
 	//NOTE: modifying defines requires recompile so don't use once a frame!!! returns true on change
 	bool define(std::string name, std::string value);
 	bool define(std::string name, int value);
+	bool getDefine(const std::string& name) const;
+	bool getDefine(const std::string& name, std::string& out) const;
 	void undef(std::string name);
 	void undefAll();
 	

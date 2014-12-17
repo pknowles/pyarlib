@@ -83,7 +83,7 @@ int extractDefine(std::string& line, std::string& define)
 	while (it != line.end() && *it != ' ')
 		define += *(it++); //everything until space or newline
 
-	return 1 + (it - line.begin());
+	return (it - line.begin());
 }
 
 std::string printPath(std::vector<std::string> path)
@@ -312,46 +312,51 @@ bool ShaderBuild::parse(std::string file, FileBits& sourceBits, Defines& defs, s
 		int end = extractDefine(line, define);
 		if (end >= 0)
 		{
+			existingDefines[define] = pyarlib::trim(stripComments(line.substr(end)));
 			for (Defines::iterator it = defs.begin(); it != defs.end(); ++it)
 			{
 				if (it->first == define)
 				{
-					line = line.substr(0, end) + it->second + "\n";
+					line = line.substr(0, end+1) + it->second + "\n";
 				}
 			}
 		}
 		
 		if (extractInclude(line, include))
 		{
-			//add current bit
-			int bitIndex = allfilebits.size();
-			if (sourceBits.size() > 0) //ATI doesn't like #line before #version
-				bit.bit = "#line " + intToString(bit.startLine+1) + " " + intToString(bitIndex) + "\n" + bit.bit;
-			sourceBits.push_back(bitIndex);
-			allfilebits.push_back(bit);
-			
-			//this is needed to count for the #line produced by thie #include (I think)
-			linenum += 1;
-			
+			//replace macros in include line
 			if (defs.find(include) != defs.end())
 				include = defs[include];
 			
-			//prioritse local path. search if it doesn't exist
-			std::string relativeInclude = basefilepath(file) + include;
-			if (fileExists(relativeInclude.c_str()) || includeOverrides.find(relativeInclude) != includeOverrides.end())
-				include = relativeInclude;
-			else
-				FileFinder::find(include, include);
+			if (include != "<none>") //Special name to ignore the include
+			{
+				//add current bit
+				int bitIndex = allfilebits.size();
+				if (sourceBits.size() > 0) //ATI doesn't like #line before #version
+					bit.bit = "#line " + intToString(bit.startLine+1) + " " + intToString(bitIndex) + "\n" + bit.bit;
+				sourceBits.push_back(bitIndex);
+				allfilebits.push_back(bit);
 			
-			//parse included file
-			path.back() = file + ":" + intToString(linenum);
-			if (!parse(include, sourceBits, defs, path))
-				return false;
+				//this is needed to count for the #line produced by thie #include (I think)
+				linenum += 1;
 			
-			bit = FileBit();
-			bit.path = path;
-			bit.filename = file;
-			bit.startLine = linenum;
+				//prioritse local path. search if it doesn't exist
+				std::string relativeInclude = basefilepath(file) + include;
+				if (fileExists(relativeInclude.c_str()) || includeOverrides.find(relativeInclude) != includeOverrides.end())
+					include = relativeInclude;
+				else
+					FileFinder::find(include, include);
+			
+				//parse included file
+				path.back() = file + ":" + intToString(linenum);
+				if (!parse(include, sourceBits, defs, path))
+					return false;
+			
+				bit = FileBit();
+				bit.path = path;
+				bit.filename = file;
+				bit.startLine = linenum;
+			}
 		}
 		else
 		{

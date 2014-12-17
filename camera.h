@@ -102,6 +102,8 @@ public:
 	void load(std::string filename);
 	void save(std::string filename);
 	
+	static Camera identity();
+	
 	//used for depth of field with thin lens approximation. just helper/storage, doesn't affect rest of Camera class
 	//note: fov remains constant. thus, true f-number, focal length or sensor height may change while focusing
 	//1. when storing focal length, camera focuses by changing the sensor size and position

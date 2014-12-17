@@ -44,6 +44,7 @@ int isqrt(int x);
 int countBits(const int& x);
 bool isPowerOf2(const int& x);
 int nextPowerOf2(int x);
+int resizeWithinFactor(int x, int y, float f = 2.0f); //resize y to f y when x < y/f^2 || x > y
 int ceil(const int& n, const int& d);
 vec2i ceil(const vec2i& n, const vec2i& d);
 unsigned int binomial(unsigned int n, unsigned int k);
@@ -160,17 +161,6 @@ struct my_array_deleter
 };
 
 template<typename T>
-struct my_demand {
-private:
-	T* object;
-	void release() {delete object; object = NULL;}
-public:
-	my_demand() {object = NULL;}
-	virtual ~my_demand() {release();}
-	operator T&() {if (object == NULL) object = new T(); return *object;}
-};
-
-template<typename T>
 struct my_swapper {
 private:
 	bool s;
@@ -186,6 +176,19 @@ std::string format(const std::string fmt, ...);
 
 namespace pyarlib
 {
+	template<typename T>
+	struct on_demand {
+	private:
+		T* object;
+		void release() {delete object; object = NULL;}
+	public:
+		on_demand() {object = NULL;}
+		virtual ~on_demand() {release();}
+		operator T*() {if (object == NULL) object = new T(); return object;}
+		operator T&() {return *(T*)*this;}
+		T* operator ->() {return (T*)*this;}
+	};
+
 	std::string join(const std::string& str, const std::vector<std::string>& l);
 	std::vector<std::string> split(const std::string& str, const std::string delim = "", int n = 0);
 	std::string trim(const std::string str);

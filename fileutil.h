@@ -14,6 +14,7 @@ bool fileExists(const char* filename);
 int fileTime(const char* filename);
 bool pathExists(const char* path);
 bool readFile(std::string& str, const char* filename);
-bool readUncomment(std::istream& stream, std::string& line); //not thread safe!
+bool readUncomment(std::istream& stream, std::string& line); //not thread safe! or fully tested
+std::string stripComments(const std::string& text); //wrapper for one-line readUncomment
 
 #endif

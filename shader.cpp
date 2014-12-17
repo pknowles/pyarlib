@@ -542,6 +542,9 @@ bool Shader::reload()
 		ok = ok && build.compile(geom, GL_GEOMETRY_SHADER, &defines, &errorStr);
 		ok = ok && build.compile(comp, GL_COMPUTE_SHADER, &defines, &errorStr);
 	
+		existingDefines.clear();
+		existingDefines.insert(build.existingDefines.begin(), build.existingDefines.end());
+	
 		CHECKERROR;
 	
 		//get references and their initial timestamps
@@ -774,6 +777,35 @@ bool Shader::define(std::string name, std::string value)
 bool Shader::define(std::string name, int value)
 {
 	return define(name, intToString(value));
+}
+
+bool Shader::getDefine(const std::string& name) const
+{
+	//check override defines first
+	if (defines.find(name) != defines.end())
+		return true;
+	//search defines found during last build
+	if (existingDefines.find(name) != existingDefines.end())
+		return true;
+	return false;
+}
+
+bool Shader::getDefine(const std::string& name, std::string& out) const
+{
+	//check override defines first
+	auto item = defines.find(name);
+	if (item != defines.end())
+	{
+		out = item->second;
+		return true;
+	}
+	//search defines found during last build
+	if ((item = existingDefines.find(name)) != existingDefines.end())
+	{
+		out = item->second;
+		return true;
+	}
+	return false;
 }
 
 void Shader::undef(std::string name)

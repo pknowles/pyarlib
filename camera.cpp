@@ -415,6 +415,16 @@ void Camera::moveFocus(float newFocus, float step)
 	focus = d * C / (d - C);
 	#endif
 }
+
+Camera Camera::identity()
+{
+	Camera r;
+	r.setOrthographic(2.0f);
+	PRINTMAT44(r.getProjection());
+	PRINTMAT44(r.getInverse());
+	return r;
+}
+
 void Camera::setBlurryness(float B)
 {
 	aperture = getSensorHeight() * B;
