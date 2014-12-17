@@ -12,7 +12,7 @@
 #TODO: automatically include LIBRARIES specified by child makefiles
 
 #change these. TARGET with .a and .so are handled automatically. point DEP_LIBS to dependent libraries for recursive compilation
-TARGET=lib3ds$(ASFX).a
+TARGET=libopenctm$(ASFX).a
 DEP_LIBS=
 CFLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable -Wall -Wextra -D_GNU_SOURCE -Wfatal-errors -Wno-switch -Wno-sign-compare
 LIBRARIES=
