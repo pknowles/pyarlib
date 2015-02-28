@@ -12,15 +12,23 @@ class Shader;
 
 class ShaderDebug
 {
+	enum Counters {
+		COUNTER_LINE,
+		COUNTER_EVENT,
+		COUNTER_CUSTOM,
+	};
 	int strides[3];
 	int lastSizes[3];
 	TextureBuffer counters;
 	TextureBuffer lines;
 	TextureBuffer events;
 	TextureBuffer custom;
-	Shader* shader;
+	Shader *shader, *drawShader;
 public:
 	ShaderDebug();
+	~ShaderDebug();
+	bool on;
+	void define(Shader* shader);
 	void start(Shader* shader);
 	void stop();
 	void draw(mat44 transform);
