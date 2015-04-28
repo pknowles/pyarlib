@@ -875,7 +875,8 @@ bool TraceScene::hitSurface(vec4f& colour, Ray& ray, HitInfo& hitInfo, TraceStac
 	bool debugTrace = ((traceFlags & TRACE_DEBUG) > 0);
 	bool insertPhoton = isPhoton && hasBounced;
 	bool lowIntensity = ray.intensity.x + ray.intensity.y + ray.intensity.z + ray.intensity.w < 0.1f;
-	bool nonPrimary = ((ray.mask & Ray::GLOBAL) > 0) || lowIntensity;
+	bool isGlobal = (ray.mask & Ray::GLOBAL) > 0;
+	bool nonPrimary = isGlobal || lowIntensity;
 	
 	//if (lowIntensity)
 	//	return true;
@@ -1154,13 +1155,15 @@ bool TraceScene::hitSurface(vec4f& colour, Ray& ray, HitInfo& hitInfo, TraceStac
 	float ca = cos(a);
 	float sa = sin(a);
 	
-	int glossRays = material->gloss < 1.0f ? gloss.samples : 1;
+	bool isGlossy = material->gloss < 1.0f;
+	int glossRays = (isGlossy && !hasBounced && !isGlobal) ? gloss.samples : 1;
 	vec4f glossIntensity = newRay.intensity * vec4f(vec3f(1.0f / glossRays), 1.0f);
 	for (int i = 0; i < glossRays; ++i)
 	{
 		vec3f glossyNormal;			
-		if (glossRays > 1)
+		if (isGlossy)
 		{
+			//FIXME: may generate back-facing normal
 			vec3f sampleDir = gloss.normalOffsets[i];
 			sampleDir.x *= 1.0f - material->gloss;
 			sampleDir.y *= 1.0f - material->gloss;
