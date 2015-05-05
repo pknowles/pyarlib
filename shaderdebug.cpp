@@ -15,12 +15,7 @@ ShaderDebug::ShaderDebug() : counters(GL_R32UI), lines(GL_RGBA32F), events(GL_RG
 }
 ShaderDebug::~ShaderDebug()
 {
-	if (shader)
-	{
-		shader->release();
-		delete shader;
-		shader = NULL;
-	}
+	shader = NULL;
 	if (drawShader)
 	{
 		drawShader->release();
