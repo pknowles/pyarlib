@@ -172,10 +172,10 @@ void Camera::setDistance(float n, float f)
 {
 	setClipPlanes(n, f);
 }
-void Camera::setClipPlanes(float near, float far)
+void Camera::setClipPlanes(float nearPlane, float farPlane)
 {
-	nearPlane = near;
-	farPlane = far;
+	this->nearPlane = nearPlane;
+	this->farPlane = farPlane;
 }
 void Camera::setClipPlanes(vec2f nearFar)
 {
