@@ -5,7 +5,9 @@
 #define EVENT_WARNING   1001
 #define EVENT_COUNT     1002
 
-#ifdef DEBUG
+#define SHADER_DEBUG defined_by_app
+
+#if SHADER_DEBUG
 
 #include "util.glsl"
 
@@ -28,12 +30,12 @@ layout(binding = 3) uniform atomic_uint debugCounterEvents;
 layout(binding = 3) uniform atomic_uint debugCounterCustom;
 
 layout(rgba32f) uniform imageBuffer debugDataLines;
-layout(rgba32i) uniform imageBuffer debugDataEvents;
+layout(rgba32i) uniform iimageBuffer debugDataEvents;
 layout(rgba32f) uniform imageBuffer debugDataCustom;
 
 void debugAddLineCC(vec3 from, vec3 to, vec4 colFrom, vec4 colTo)
 {
-	int i = int(atomicIncrement(debugCounterLines));
+	int i = int(atomicCounterIncrement(debugCounterLines));
 	imageStore(debugDataLines, i*3+0, vec4(from, 1.0));
 	imageStore(debugDataLines, i*3+1, vec4(to, 1.0));
 	imageStore(debugDataLines, i*3+2, vec4(rgba8ToFloat(colFrom), rgba8ToFloat(colTo), 0, 0));
@@ -41,14 +43,14 @@ void debugAddLineCC(vec3 from, vec3 to, vec4 colFrom, vec4 colTo)
 
 void debugEvent(int event, ivec4 dat)
 {
-	int i = int(atomicIncrement(debugCounterEvents));
+	int i = int(atomicCounterIncrement(debugCounterEvents));
 	imageStore(debugDataEvents, i*2+0, ivec4(event, DEBUG_THREADID_X, DEBUG_THREADID_Y, 0));
 	imageStore(debugDataEvents, i*2+1, dat);
 }
 
 void debugCustom(vec4 dat)
 {
-	int i = int(atomicIncrement(debugCounterCustom));
+	int i = int(atomicCounterIncrement(debugCounterCustom));
 	imageStore(debugDataCustom, i, dat);
 }
 
@@ -75,3 +77,4 @@ void fireAssert(int file, int line)
 {
 	debugEvent(EVENT_ASSERT, ivec4(file, line, 0, 0));
 }
+
