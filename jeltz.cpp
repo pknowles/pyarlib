@@ -96,7 +96,9 @@ Jeltz::Jeltz(const char* name)
 	memcpy(windowTitle, name, len+1);
 	running = false;
 	numPlugins = 0;
-	pendingResize = vec2i(0);
+	desktopRes = vec2i(0);
+	pendingResize = vec2i(-1);
+	pendingMove = vec2i(-1);
 	windowSize = vec2i(0);
 	windowedSize = windowSize;
 	mousePosition = vec2i(0);
@@ -331,10 +333,17 @@ void Jeltz::processEvents()
 	mouseDelta = vec2i(0);
 	mouseWheelDelta = vec2i(0);
 	
-	if (pendingResize.x > 0)
+
+	if (pendingMove.x >= 0)
+	{
+		doMove(pendingMove.x, pendingMove.y);
+		pendingMove = vec2i(-1);
+	}
+
+	if (pendingResize.x >= 0)
 	{
 		doResize(pendingResize.x, pendingResize.y);
-		pendingResize = vec2i(0);
+		pendingResize = vec2i(-1);
 	}
 
 	while (SDL_PollEvent(&event))
@@ -451,10 +460,16 @@ bool Jeltz::init()
 	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 	
-	SDL_DisplayMode dm;
-	SDL_GetDesktopDisplayMode(0, &dm);
-	desktopRes.x = dm.w;
-	desktopRes.y = dm.h;
+	displays.resize(SDL_GetNumVideoDisplays());
+	for (size_t d = 0; d < displays.size(); ++d)
+	{
+		SDL_Rect r;
+		SDL_GetDisplayBounds(d, &r);
+		displays[d].position = vec2i(r.x, r.y);
+		displays[d].size = vec2i(r.w, r.h);
+	}
+	if (displays.size())
+		desktopRes = displays[0].size;
 	
 	window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		DEFAULT_WIDTH, DEFAULT_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
@@ -609,6 +624,14 @@ void Jeltz::run()
 	//start main loop
 	while (running)
 	{
+		processEvents();
+
+		if (button("Escape"))
+		{
+			quit();
+			break;
+		}
+
 		#if 0
 		thisTime = SDL_GetTicks();
 		deltaTime = thisTime - lastTime;
@@ -659,14 +682,6 @@ void Jeltz::run()
 			#else
 			usleep(microseconds);
 			#endif
-		}
-		
-		processEvents();
-		
-		if (button("Escape"))
-		{
-			quit();
-			break;
 		}
 	}
 	
@@ -763,19 +778,32 @@ vec2i Jeltz::winSize()
 	return windowSize;
 }
 
-void Jeltz::doResize(int width, int height)
+void Jeltz::doMove(int x, int y)
 {
 	if (isFullscreen)
 		return;
+
+#if JELTZ_USE_SDL13
+	SDL_SetWindowPosition(window, x, y);
+#else
+	printf("Warning: setting the window position is not implemented for SDL 1.2")
+#endif
+	CHECKSDLERROR;
+}
+
+void Jeltz::doResize(int w, int h)
+{
+	if (isFullscreen)
+		return;
+
+	if (debugEvents)
+		printf("Window size set internally: %ix%i\n", w, h);
 	
-	windowedSize.x = width;
-	windowedSize.y = height;
+	windowedSize.x = w;
+	windowedSize.y = h;
 
 	//bool maximized = (desktopRes == windowedSize);
 	bool nearMaxSize = (desktopRes.x - windowedSize.x < 16) && (desktopRes.y - windowedSize.y < 64);
-
-	if (debugEvents)
-		printf("Window size set internally: %ix%i\n", width, height);
 		
 #if JELTZ_USE_SDL13
 	SDL_SetWindowBordered(window, (isBorderless || nearMaxSize) ? SDL_FALSE : SDL_TRUE);
@@ -808,6 +836,16 @@ void Jeltz::resize(int width, int height)
 	pendingResize = vec2i(width, height);
 }
 
+void Jeltz::move(vec2i pos)
+{
+	pendingMove = pos;
+}
+
+void Jeltz::move(int x, int y)
+{
+	pendingMove = vec2i(x, y);
+}
+
 void Jeltz::fullScreen(bool enable)
 {
 	if (changeFullscreen == enable)
@@ -815,6 +853,21 @@ void Jeltz::fullScreen(bool enable)
 		
 	//flag is set so window should change in updateWindow()
 	changeFullscreen = enable;
+}
+
+void Jeltz::maximize()
+{
+	vec2i biggestPos(0);
+	vec2i biggest(0);
+	for (size_t d = 0; d < displays.size(); ++d)
+	if (displays[d].size.size() > biggest.size())
+	{
+		biggestPos = displays[d].position;
+		biggest = displays[d].size;
+	}
+	isBorderless = true;
+	move(biggestPos);
+	resize(biggest);
 }
 
 void Jeltz::removeBorder(bool enable)
