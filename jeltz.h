@@ -67,11 +67,19 @@ private:
 	std::set<std::string> keysDown;
 	std::set<std::string> keyStates;
 	std::set<std::string> keysUp;
+
+	struct Display {
+		vec2i position;
+		vec2i size;
+	};
+	std::vector<Display> displays;
+
 	float sleepTime;
 	float minFrameTime; //vsync alternative. call limit()
 	bool isMouseDown; //any mouse button
 	vec2i desktopRes;
 	vec2i pendingResize;
+	vec2i pendingMove;
 	vec2i windowedSize;
 	vec2i windowSize;
 	vec2i mousePosition;
@@ -119,7 +127,8 @@ private:
 	void processEventMouseButton(SDL_MouseButtonEvent& btn);
 	void processEvents();
 	void reshape(int w, int h);
-	void doResize(int width, int height);
+	void doMove(int x, int y);
+	void doResize(int w, int h);
 public:
 
 	//constructor with window title
@@ -162,8 +171,11 @@ public:
 	void vsync(bool enable = true); //call after init()
 	void resize(vec2i size);
 	void resize(int width, int height);
+	void move(vec2i pos);
+	void move(int x, int h);
 	bool getFullscreen() {return isFullscreen;}
 	void fullScreen(bool enable = true); //call after init()
+	void maximize();
 	bool getBorderless() {return isBorderless;}
 	void removeBorder(bool enable = true);
 	void printEvents(bool enable = true); //use for debugging and to get event names

@@ -61,7 +61,7 @@ public:
 	void copyProjection(const Camera& other);
 	void setAspectRatio(float r);
 	void setDistance(float n, float f);
-	void setClipPlanes(float near, float far);
+	void setClipPlanes(float nearPlane, float farPlane);
 	void setClipPlanes(vec2f nearFar);
 	void setPerspective(float a);
 	void setOrthographic(float s);
