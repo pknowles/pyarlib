@@ -89,7 +89,6 @@ all: $(TMP) $(TARGET)
 
 #prints a list of library dependencies recursively
 echodeps:
-	@#type normpath >/dev/null && [[ -n "$(DEP_LIBS_R)" ]] && normpath $(DEP_LIBS_R) || echo $(DEP_LIBS_R)
 	@echo $(foreach deplib, $(DEP_LIBS_R), $(shell python -c "import os.path; print os.path.relpath(\"$(deplib)\")"))
 
 -include $(DEPS)

@@ -85,7 +85,8 @@ struct mat44
 	float det() const;
 	mat44 transpose() const;
 	mat44 inverse() const;
-	void print();
+	void print() const;
+	vec3f orthographicSize() const; //assumes its an orthographic projection
 
 	static mat44 zero();
 	static mat44 filled(float v);

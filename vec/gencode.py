@@ -6,7 +6,7 @@ import datetime
 
 import re
 match_def = re.compile("//#for.+")
-match_dec = re.compile("//#[A-Za-z]+=[A-Za-z'\" ,\[\]\(\)]+")
+match_dec = re.compile("//#[A-Za-z]+=.+")
 match_if = re.compile("//#if.+")
 match_end = re.compile("//#end")
 match_ins = re.compile("\$<[^>]*>")
@@ -34,10 +34,6 @@ class Parser:
 		for line in file:
 			if match_end.search(line):
 				return
-			dec = match_dec.search(line)
-			if dec:
-				print "var ", dec.group()[3:]
-				exec(dec.group()[3:], Parser.globalVars)
 			ins = match_def.search(line) or match_if.search(line)
 			if ins:
 				this.blocks += [Parser(file, ins.group()[3:])]
@@ -48,10 +44,24 @@ class Parser:
 				vars = {"date":date}
 			got = ""
 			def run(got, vars):
+				#print vars
 				for l in this.blocks:
 					if isinstance(l, str):
 						line = l
 						p = 0
+						
+						dec = match_dec.search(line)
+						if dec:
+							print "var ", dec.group()[3:]
+							before = Parser.globalVars.keys(), vars.keys()
+							exec dec.group()[3:] in Parser.globalVars, vars
+							#for k in Parser.globalVars.keys():
+							#	if k not in before[0]:
+							#		print k, "=", repr(Parser.globalVars[k])
+							#for k in vars.keys():
+							#	if k not in before[1]:
+							#		print k, "=", repr(vars[k])
+									
 						for ins in match_ins.finditer(line):
 							got += line[p: ins.start()]
 							p = ins.end()

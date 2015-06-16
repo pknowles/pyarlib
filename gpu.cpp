@@ -265,9 +265,15 @@ void Texture::buffer(const void* data, int sizeCheck)
 	
 	int cpp = channelsPerPixel(format);
 	GLenum informat = defaultFormat(cpp);
+	GLenum formattype = getTextureBaseType(format);
+	
+	if (formattype != GL_UNSIGNED_BYTE &&  formattype != GL_FLOAT)
+	{
+		printf("Warning: buffering unknown data type\n");
+	}
 	
 	bind();
-	glTexImage2D(type, 0, format, size.x, size.y, 0, informat, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(type, 0, format, size.x, size.y, 0, informat, formattype, data);
 	unbind();
 }
 
@@ -329,7 +335,7 @@ bool Texture::setUniform(int exposeAs, Shader* program, const std::string& name)
 		bind();
 		glActiveTexture(GL_TEXTURE0);
 		program->set(name, index);
-		//printf("Set %i (loc=%i) %s %i\n", object, loc, name.c_str(), index);
+		//printf("Set obj_%i (loc=%i) \"%s.%s\" idx=%i\n", object, loc, program->name().c_str(), name.c_str(), index);
 		return true;
 	}
 	else if (exposeAs == Shader::IMAGE_UNIT)

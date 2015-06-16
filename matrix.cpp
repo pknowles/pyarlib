@@ -220,7 +220,7 @@ mat44 mat44::inverse() const
 			r.d[x][y] = rdet * cofactor(y, x);
 	return r;
 }
-void mat44::print()
+void mat44::print() const
 {
 	for (int y = 0; y < 4; ++y)
 	{
@@ -230,6 +230,10 @@ void mat44::print()
 		}
 		printf("\n");
 	}
+}
+vec3f mat44::orthographicSize() const
+{
+	return vec3f(2.0f/m[0], 2.0f/m[5], -2.0f/m[10]);
 }
 mat44 mat44::zero()
 {

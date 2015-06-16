@@ -11,6 +11,10 @@
 #endif
 
 //#for vtypec, vtypen in alltypes
+
+//#realtype="float" if vtypec == "f" else "double"
+//#realsfx="f" if vtypec == "f" else ""
+
 //#for vdim in 2, 3, 4
 vec$<vdim>$<vtypec>::vec$<vdim>$<vtypec>()
 {
@@ -237,15 +241,26 @@ $<vtypen> vec$<vdim>$<vtypec>::cmin() const
 }
 vec$<vdim>$<vtypec> vec$<vdim>$<vtypec>::tolen($<vtypen> len)
 {
-	return *this * (len / size());
+	return unit() * len;
 }
 void vec$<vdim>$<vtypec>::normalize()
 {
-	*this /= size();
+	$<realtype> l = size();
+	if (l != 0.0$<realsfx>)
+		*this /= l;
+	else
+	{
+		x = 1.0$<realsfx>;
+		$<"=".join("xyzw"[1:vdim])> = 0.0$<realsfx>;
+	}
 }
 vec$<vdim>$<vtypec> vec$<vdim>$<vtypec>::unit() const
 {
-	return *this / size();
+	$<realtype> l = size();
+	if (l != 0.0$<realsfx>)
+		return *this / size();
+	else
+		return vec$<vdim>$<vtypec>(1.0$<realsfx>$<(", 0.0"+realsfx)*(vdim-1)>);
 }
 //#if vtypec == "f" and vdim == 2
 vec3f vec$<vdim>$<vtypec>::toVec() const

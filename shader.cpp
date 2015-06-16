@@ -238,10 +238,11 @@ Shader::~Shader()
 	//don't release as shaders may be declared static
 	//and there's no guarantee
 	//release();
-	if (instanceLookup.find(program) != instanceLookup.end())
+	if (instanceLookup.size() && instanceLookup.find(program) != instanceLookup.end())
 		instanceLookup.erase(program); //erase this instance if it exists in the program lookup
 	
-	instances->erase(this);
+	if (instances->size())
+		instances->erase(this);
 }
 
 void Shader::load(string filename)

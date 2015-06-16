@@ -565,6 +565,8 @@ Benchmark::Benchmark(std::string filename)
 	state = STATE_STOPPED;
 	running = false;
 	
+	totalFrames = 1;
+	
 	onChange = NULL;
 	
 	current = 0;
@@ -608,6 +610,9 @@ void Benchmark::start()
 		std::cout << "Benchmark has no tests. Call createTest()" << std::endl;
 		return;
 	}
+	
+	if (totalFrames == 0)
+		std::cout << "Warning: have you forgotten to call benchmark.update(dt)?" << std::endl;
 
 	std::cout << "Opening " << fname << " to write results." << std::endl;
 	resultsFile.open(fname.c_str());

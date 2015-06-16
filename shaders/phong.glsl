@@ -169,10 +169,9 @@ vec4 phong()
 	}
 
 	#ifndef DIFFUSE_COLOUR
-	#define DIFFUSE_COLOUR ((textured & 1) != 0) ? texture(texColour, coord) : vec4(1.0)
+	#define DIFFUSE_COLOUR ((((textured & 1) != 0) ? texture(texColour, coord) : vec4(1.0))  * colourIn)
 	#endif
 	fragColour = DIFFUSE_COLOUR;
-	fragColour.a *= colourIn.a;
 	
 	if (unlit == 0)
 	{
@@ -181,8 +180,12 @@ vec4 phong()
 		#else
 		float diffuse = max(0.0, dot(N, L));
 		#endif
-	
-		fragColour.rgb = fragColour.rgb * colAmbient + fragColour.rgb * colourIn.rgb * diffuse;
+		
+		#ifdef DIFFUSE_INCREASE
+		diffuse = mix(diffuse, 1.0, DIFFUSE_INCREASE);
+		#endif
+		
+		fragColour.rgb = fragColour.rgb * colAmbient + fragColour.rgb * diffuse;
 		
 		if (diffuse > 0.0)
 		{

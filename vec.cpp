@@ -1,5 +1,5 @@
 /* Copyright 2011 Pyarelal Knowles, under GNU GPL (see LICENCE.txt) */
-/* file generated on 03/09/14 with gencode.py */
+/* file generated on 13/02/15 with gencode.py */
 
 #include "prec.h"
 
@@ -9,6 +9,10 @@
 #ifdef _WIN32
 #pragma warning (disable:4244) //loss of precision warnings
 #endif
+
+
+//#realtype="float" if vtypec == "f" else "double"
+//#realsfx="f" if vtypec == "f" else ""
 
 vec2f::vec2f()
 {
@@ -275,15 +279,26 @@ float vec2f::cmin() const
 }
 vec2f vec2f::tolen(float len)
 {
-	return *this * (len / size());
+	return unit() * len;
 }
 void vec2f::normalize()
 {
-	*this /= size();
+	float l = size();
+	if (l != 0.0f)
+		*this /= l;
+	else
+	{
+		x = 1.0f;
+		y = 0.0f;
+	}
 }
 vec2f vec2f::unit() const
 {
-	return *this / size();
+	float l = size();
+	if (l != 0.0f)
+		return *this / size();
+	else
+		return vec2f(1.0f, 0.0f);
 }
 vec3f vec2f::toVec() const
 {
@@ -678,15 +693,26 @@ float vec3f::cmin() const
 }
 vec3f vec3f::tolen(float len)
 {
-	return *this * (len / size());
+	return unit() * len;
 }
 void vec3f::normalize()
 {
-	*this /= size();
+	float l = size();
+	if (l != 0.0f)
+		*this /= l;
+	else
+	{
+		x = 1.0f;
+		y=z = 0.0f;
+	}
 }
 vec3f vec3f::unit() const
 {
-	return *this / size();
+	float l = size();
+	if (l != 0.0f)
+		return *this / size();
+	else
+		return vec3f(1.0f, 0.0f, 0.0f);
 }
 vec3f vec3f::cross(const vec3f& other) const
 {
@@ -1152,15 +1178,26 @@ float vec4f::cmin() const
 }
 vec4f vec4f::tolen(float len)
 {
-	return *this * (len / size());
+	return unit() * len;
 }
 void vec4f::normalize()
 {
-	*this /= size();
+	float l = size();
+	if (l != 0.0f)
+		*this /= l;
+	else
+	{
+		x = 1.0f;
+		y=z=w = 0.0f;
+	}
 }
 vec4f vec4f::unit() const
 {
-	return *this / size();
+	float l = size();
+	if (l != 0.0f)
+		return *this / size();
+	else
+		return vec4f(1.0f, 0.0f, 0.0f, 0.0f);
 }
 
 //bit ops
@@ -1479,6 +1516,10 @@ std::ostream& operator<<(std::ostream &out, const vec4f &v)
 	return out;
 }
 
+
+//#realtype="float" if vtypec == "f" else "double"
+//#realsfx="f" if vtypec == "f" else ""
+
 vec2i::vec2i()
 {
 }
@@ -1780,15 +1821,26 @@ int vec2i::cmin() const
 }
 vec2i vec2i::tolen(int len)
 {
-	return *this * (len / size());
+	return unit() * len;
 }
 void vec2i::normalize()
 {
-	*this /= size();
+	double l = size();
+	if (l != 0.0)
+		*this /= l;
+	else
+	{
+		x = 1.0;
+		y = 0.0;
+	}
 }
 vec2i vec2i::unit() const
 {
-	return *this / size();
+	double l = size();
+	if (l != 0.0)
+		return *this / size();
+	else
+		return vec2i(1.0, 0.0);
 }
 int vec2i::cross(const vec2i& other) const
 {
@@ -2230,15 +2282,26 @@ int vec3i::cmin() const
 }
 vec3i vec3i::tolen(int len)
 {
-	return *this * (len / size());
+	return unit() * len;
 }
 void vec3i::normalize()
 {
-	*this /= size();
+	double l = size();
+	if (l != 0.0)
+		*this /= l;
+	else
+	{
+		x = 1.0;
+		y=z = 0.0;
+	}
 }
 vec3i vec3i::unit() const
 {
-	return *this / size();
+	double l = size();
+	if (l != 0.0)
+		return *this / size();
+	else
+		return vec3i(1.0, 0.0, 0.0);
 }
 vec3i vec3i::cross(const vec3i& other) const
 {
@@ -2774,15 +2837,26 @@ int vec4i::cmin() const
 }
 vec4i vec4i::tolen(int len)
 {
-	return *this * (len / size());
+	return unit() * len;
 }
 void vec4i::normalize()
 {
-	*this /= size();
+	double l = size();
+	if (l != 0.0)
+		*this /= l;
+	else
+	{
+		x = 1.0;
+		y=z=w = 0.0;
+	}
 }
 vec4i vec4i::unit() const
 {
-	return *this / size();
+	double l = size();
+	if (l != 0.0)
+		return *this / size();
+	else
+		return vec4i(1.0, 0.0, 0.0, 0.0);
 }
 
 //bit ops
@@ -3129,6 +3203,10 @@ std::ostream& operator<<(std::ostream &out, const vec4i &v)
 	return out;
 }
 
+
+//#realtype="float" if vtypec == "f" else "double"
+//#realsfx="f" if vtypec == "f" else ""
+
 vec2d::vec2d()
 {
 }
@@ -3358,15 +3436,26 @@ double vec2d::cmin() const
 }
 vec2d vec2d::tolen(double len)
 {
-	return *this * (len / size());
+	return unit() * len;
 }
 void vec2d::normalize()
 {
-	*this /= size();
+	double l = size();
+	if (l != 0.0)
+		*this /= l;
+	else
+	{
+		x = 1.0;
+		y = 0.0;
+	}
 }
 vec2d vec2d::unit() const
 {
-	return *this / size();
+	double l = size();
+	if (l != 0.0)
+		return *this / size();
+	else
+		return vec2d(1.0, 0.0);
 }
 double vec2d::cross(const vec2d& other) const
 {
@@ -3700,15 +3789,26 @@ double vec3d::cmin() const
 }
 vec3d vec3d::tolen(double len)
 {
-	return *this * (len / size());
+	return unit() * len;
 }
 void vec3d::normalize()
 {
-	*this /= size();
+	double l = size();
+	if (l != 0.0)
+		*this /= l;
+	else
+	{
+		x = 1.0;
+		y=z = 0.0;
+	}
 }
 vec3d vec3d::unit() const
 {
-	return *this / size();
+	double l = size();
+	if (l != 0.0)
+		return *this / size();
+	else
+		return vec3d(1.0, 0.0, 0.0);
 }
 vec3d vec3d::cross(const vec3d& other) const
 {
@@ -4126,15 +4226,26 @@ double vec4d::cmin() const
 }
 vec4d vec4d::tolen(double len)
 {
-	return *this * (len / size());
+	return unit() * len;
 }
 void vec4d::normalize()
 {
-	*this /= size();
+	double l = size();
+	if (l != 0.0)
+		*this /= l;
+	else
+	{
+		x = 1.0;
+		y=z=w = 0.0;
+	}
 }
 vec4d vec4d::unit() const
 {
-	return *this / size();
+	double l = size();
+	if (l != 0.0)
+		return *this / size();
+	else
+		return vec4d(1.0, 0.0, 0.0, 0.0);
 }
 
 //bit ops

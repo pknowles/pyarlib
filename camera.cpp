@@ -96,6 +96,7 @@ void Camera::regenProjection()
 		projection.m[0*4+0] = 1.0f / r;
 		projection.m[1*4+1] = 1.0f / t;
 		projection.m[2*4+2] = -2.0f / (farPlane - nearPlane);
+		//NOTE: this produces an orthographic projection with linear depth
 		projection.m[3*4+2] = -(farPlane + nearPlane) / (farPlane - nearPlane);
 		projection.m[3*4+3] = 1.0f;
 	}

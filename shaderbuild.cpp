@@ -14,6 +14,7 @@
 #include "fileutil.h"
 #include "util.h"
 #include "findfile.h"
+#include "shader.h"
 
 bool ShaderBuild::printProcessed = false;
 
@@ -144,6 +145,17 @@ bool ShaderBuild::getFileLine(std::string file, int line, std::string& source)
 	ifile.close();
 	return ret;
 */
+}
+
+ShaderBuild::ShaderBuild()
+{
+	static bool loadNullInclude = false;
+	if (!loadNullInclude)
+	{
+		static const char* empty = "";
+		Shader::include("null", empty);
+		loadNullInclude = true;
+	}
 }
 
 void ShaderBuild::parseLog(std::string* errStr, std::string log, int baseFile, bool readLineNumbers)

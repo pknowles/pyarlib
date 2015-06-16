@@ -61,6 +61,8 @@ struct ShaderBuild
 	//the final compiled program. returned by ::link
 	GLuint program;
 	
+	ShaderBuild();
+	
 	//returns a line from a source file, if available
 	bool getFileLine(std::string file, int line, std::string& source);
 	
