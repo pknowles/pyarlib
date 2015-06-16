@@ -88,6 +88,8 @@ private:
 		float focus;
 		float aperture;
 		float fov;
+		float near, far;
+		float orth_size;
 	};
 	std::vector<View> views;
 	

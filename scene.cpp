@@ -755,6 +755,20 @@ void Scene::load(std::string filename)
 			views.back().data = viewData;
 			views.back().focus = view.attribute("focus").as_float();
 			views.back().fov = view.attribute("fov").as_float();
+			views.back().orth_size = view.attribute("orth_size").as_float();
+			views.back().near = view.attribute("near").as_float();
+			views.back().far = view.attribute("far").as_float();
+			if (views.back().near == 0.0f) views.back().near = 0.01f;
+			if (views.back().far == 0.0f) views.back().far = 100.0f;
+			if (views.back().fov == 0.0f) views.back().fov = CAMERA_DEFAULT_FOV*180.0f/pi;
+			
+			std::string proj = view.attribute("projection").value();
+			bool perspective = proj != "orthographic";
+			if (!perspective) views.back().fov = 0.0f;
+			
+			if (perspective && views.back().fov <= 0.0f) cout << "Error: Invalid FOV for view " << views.back().name << std::endl;
+			if (!perspective && views.back().orth_size <= 0.0f) cout << "Error: Invalid ortho_size for view " << views.back().name << std::endl;
+			if (proj != "" && proj != "perspective" && proj != "orthographic") cout << "Error: Invalid projection for view " << views.back().name << std::endl;
 			
 			float focalLength = 0.001f * CAMERA_DEFAULT_SENSOR_HEIGHT / (2.0f * tan(views.back().fov * 0.5f * pi / 180.0f));
 			
@@ -1062,6 +1076,7 @@ void Scene::draw(Shader* shader, Camera* cam)
 		mv = cam->getInverse();
 		mvi = cam->getTransform();
 		shader->set("projectionMat", cam->getProjection());
+		shader->set("viewMatInv", cam->getTransform());
 	}
 	else
 	{
@@ -1237,15 +1252,20 @@ void Scene::setView(int i)
 	float camScale = views[i].scale ? globalScale : 1.0f;
 	stringstream(views[i].data) >> *camera;
 	
-	if (camera->isPerspective())
+	if (views[i].fov == 0.0f)
 	{
-		camera->setDistance(0.01f, 100.0f); //not sure I want to overwrite this
-	
+		float size = views[i].orth_size;
+		if (size <= 0.0f)
+			size = 1.0f;
+		camera->setOrthographic(views[i].orth_size);
+	}
+	else
+	{	
 		float fov = views[i].fov*pi/180.0f;
-		if (fov > 0.0f && fov < pi)
-			camera->setFOV(fov);
-		else
-			camera->setFOV(CAMERA_DEFAULT_FOV);
+		if (fov <= 0.0f || fov >= pi)
+			fov = CAMERA_DEFAULT_FOV;
+		camera->setPerspective(fov);
+		camera->setDistance(views[i].near, views[i].far); //not sure I want to overwrite this
 	}
 	
 	camera->scale(camScale);
