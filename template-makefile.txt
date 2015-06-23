@@ -1,0 +1,27 @@
+
+#make commands:
+#	<default> - debug
+#	debug - for gdb
+#	prof - for gprof
+#	opt - optimizations
+#	clean - remove intermediates
+#	cleaner - clean + recurse into DEP_LIBS
+#	echodeps - print DEP_LIBS and child DEP_LIBS
+
+#find pyarlib
+PYARLIB_CHECK_DIRS=pyarlib/ ../pyarlib/ ../../pyarlib/ ../../../pyarlib/
+PYARLIB=$(strip $(foreach dir,$(PYARLIB_CHECK_DIRS),$(wildcard $(dir))))
+
+#change these
+DEP_LIBS=$(PYARLIB)pyarlib$(ASFX).a
+CFLAGS= -Wno-unused-parameter -Wno-unused-but-set-variable `pkg-config freetype2 --cflags` -std=c++11 -Wall -Wextra -D_GNU_SOURCE -Wfatal-errors
+LIBRARIES= -lopenal -lrt -lGLU -lGLEW `pkg-config freetype2 --libs` -lm -lpthread -lpng -lz -lGL `sdl2-config --libs`
+TARGET=main
+CC=g++
+LD=g++
+SOURCE_SEARCH=
+EXCLUDE_SOURCE=
+PRECOMPILED_HEADER=
+TMP=.build
+
+include $(PYARLIB)recursive.make
