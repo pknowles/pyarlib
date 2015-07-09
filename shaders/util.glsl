@@ -6,7 +6,7 @@
 uint rgba8ToUInt(vec4 c)
 {
 	uvec4 i =clamp(uvec4(c * 255.0), 0, 255);
-	return (i.x << 24U) | (i.y << 16U) | (i.z << 8U) | i.w;
+	return (i.w << 24U) | (i.z << 16U) | (i.y << 8U) | i.x;
 }
 
 float rgba8ToFloat(vec4 c)
@@ -18,10 +18,10 @@ float rgba8ToFloat(vec4 c)
 vec4 uintToRGBA8(uint i)
 {
 	return vec4(
-		(float(i>>24U))/255.0f,
-		(float((i>>16U)&0xFFU))/255.0f,
+		(float(i & 0xFFU))/255.0f,
 		(float((i>>8U)&0xFFU))/255.0f,
-		(float(i & 0xFFU))/255.0f
+		(float((i>>16U)&0xFFU))/255.0f,
+		(float(i>>24U))/255.0f
 		);
 }
 
