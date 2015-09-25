@@ -39,6 +39,7 @@ struct mat33
 	mat33();
 	mat33(const mat44& o);
 	mat33 transpose() const;
+	vec3f operator*(const vec3f& v) const;
 };
 
 struct mat44
@@ -103,6 +104,7 @@ struct mat44
 };
 
 vec4f operator*(const vec4f& v, const mat44& m);
+vec3f operator*(const vec3f& v, const mat33& m);
 vec4f& operator*=(vec4f& v, const mat44& m);
 
 #endif

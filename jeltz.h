@@ -167,7 +167,7 @@ public:
 	//quit after this frame
 	void quit();
 	
-	void limit(float frameTime); //set minimum frame time. zero to disable
+	void limit(float frameTime); //set minimum frame time (in seconds). zero to disable
 	void vsync(bool enable = true); //call after init()
 	void resize(vec2i size);
 	void resize(int width, int height);

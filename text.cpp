@@ -133,8 +133,8 @@ void Font::rasterize()
 		error = FT_Load_Glyph(face, index, FT_LOAD_DEFAULT);
 		error = FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
 		FT_Bitmap& bitmap = slot->bitmap;
-		if (bitmap.width > glyphMax.x) glyphMax.x = bitmap.width;
-		if (bitmap.rows > glyphMax.y) glyphMax.y = bitmap.rows;
+		if ((int)bitmap.width > glyphMax.x) glyphMax.x = bitmap.width;
+		if ((int)bitmap.rows > glyphMax.y) glyphMax.y = bitmap.rows;
 	}
 	if (glyphMax.x * glyphMax.y == 0)
 	{
@@ -186,7 +186,7 @@ void Font::rasterize()
 		FT_Bitmap& bitmap = slot->bitmap;
 		assert(bitmap.pixel_mode == FT_PIXEL_MODE_GRAY);
 		assert(bitmap.num_grays == 256);
-		assert((int)abs(bitmap.pitch) == bitmap.width);
+		assert((int)abs(bitmap.pitch) == (int)bitmap.width);
 		vec2i glyphSize(bitmap.width, bitmap.rows);
 		vec2i glyphPos(slot->bitmap_left, slot->bitmap_top);
 		glyphInfo[i].pos = glyphPos;
@@ -199,7 +199,7 @@ void Font::rasterize()
 			//glyphs need to be flipped for opengl
 			for (int y = 0; y < glyphSize.y; ++y)
 				for (int x = 0; x < glyphSize.x; ++x)
-					tmpData[y*glyphSize.x+x] = x < bitmap.width ? bitmap.buffer[(glyphSize.y-y-1)*(bitmap.width)+x] : 0;
+					tmpData[y*glyphSize.x+x] = x < (int)bitmap.width ? bitmap.buffer[(glyphSize.y-y-1)*(bitmap.width)+x] : 0;
 			
 			//upload glyph. since we are writing left to right, the possible overwrite
 			//of 3 pixel columns of zeroes outside the glyph box is ok - it will be overwritten with

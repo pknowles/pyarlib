@@ -414,6 +414,7 @@ void Scene::init()
 	modeltypes.insert("ctm");
 	modeltypes.insert("3ds");
 	
+	/*
 	std::vector<std::string> files = listDirectory(Config::getString("models"));
 	for (size_t i = 0; i < files.size(); ++i)
 	{
@@ -437,6 +438,7 @@ void Scene::init()
 		b->capture(QG::CLICK, _addModel, d);
 		guiElements["add"]->add(b);
 	}
+	*/
 	
 	hasInit = true;
 }

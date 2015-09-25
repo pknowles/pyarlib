@@ -101,7 +101,12 @@ void Profiler::begin()
 				
 				if (it->second.timeTo == -1)
 				{
-					printf("Warning: no ending time() for start(%s) in profiler\n", it->first.c_str());
+					static bool warned = false;
+					if (!warned)
+					{
+						warned = true;
+						printf("Warning: no ending time() for start(%s) in profiler\n", it->first.c_str());
+					}
 					continue;
 				}
 				

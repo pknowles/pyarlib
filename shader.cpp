@@ -305,7 +305,7 @@ bool Shader::checkSet(const std::string& name, const std::string& type)
 {
 	if (CHECKERROR_SILENT && !error())
 	{
-		printf("Error setting uniform (%s). Is %s bound and can %s be a %s?\n", lastErrorString.c_str(), pname.c_str(), name.c_str(), type.c_str());
+		printf("Error setting uniform (%s). Is shader %s bound and can %s be a %s?\n", lastErrorString.c_str(), pname.c_str(), name.c_str(), type.c_str());
 		return false;
 	}
 	return lastLoc != (GLuint)-1;

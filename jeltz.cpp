@@ -86,7 +86,7 @@ Jeltz::Jeltz(const char* name)
 	isFullscreen = false;
 	isBorderless = false;
 	justWarped = false;
-	hasFocus = false;
+	hasFocus = true;
 	hasResized = false;
 	hasResizedNF = true;
 	hasInit = false;
@@ -500,8 +500,6 @@ bool Jeltz::init()
 		printf("Error: Unable to create SDL surface\n");
 		return false;
 	}
-
-	hasFocus = true;
 #endif
 
 	//no vsync by default
@@ -621,11 +619,12 @@ void Jeltz::run()
 	for (int i = 0; i < numPlugins; ++i)
 		plugins[i]->init();
 
+	processEvents();
+	hasResized = true;
+		
 	//start main loop
 	while (running)
 	{
-		processEvents();
-
 		if (button("Escape"))
 		{
 			quit();
@@ -650,6 +649,7 @@ void Jeltz::run()
 		if (callbackUpdate)
 			callbackUpdate(dt);
 
+		float thisMinFrameTime = minFrameTime;
 		if (focused() || forceNextDraw)
 		{
 			forceNextDraw = false;
@@ -669,11 +669,13 @@ void Jeltz::run()
 			SDL_GL_SwapBuffers();
 #endif
 		}
+		else
+			thisMinFrameTime = 1.0/60.0; //use a frame limiter if not rendering
 		
 		//apply manual frame limiter
-		if (minFrameTime > 0.0f)
+		if (thisMinFrameTime > 0.0f)
 		{
-			sleepTime += minFrameTime - dt;
+			sleepTime += thisMinFrameTime - dt;
 			if (sleepTime < 0.0)
 				sleepTime = 0.0;
 			int microseconds = (int)(sleepTime * 1000000.0 + 0.5);
@@ -683,6 +685,8 @@ void Jeltz::run()
 			usleep(microseconds);
 			#endif
 		}
+		
+		processEvents();
 	}
 	
 	//call main (user's) cleanup before cleaning plugins etc

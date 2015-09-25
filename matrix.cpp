@@ -32,6 +32,14 @@ mat33 mat33::transpose() const
 			r.d[x][y] = d[y][x];
 	return r;	
 }
+vec3f mat33::operator*(const vec3f& v) const
+{
+	return vec3f(
+		m[0] * v.x + m[3] * v.y + m[6] * v.z,
+		m[1] * v.x + m[4] * v.y + m[7] * v.z,
+		m[2] * v.x + m[5] * v.y + m[8] * v.z
+		);
+}
 mat44::Column& mat44::Column::operator=(const vec4f& v)
 {
 	r1 = v.x;
@@ -427,6 +435,15 @@ vec4f operator*(const vec4f& v, const mat44& m)
 		m.m[ 4] * v.x + m.m[ 5] * v.y + m.m[ 6] * v.z + m.m[ 7] * v.w,
 		m.m[ 8] * v.x + m.m[ 9] * v.y + m.m[10] * v.z + m.m[11] * v.w,
 		m.m[12] * v.x + m.m[13] * v.y + m.m[14] * v.z + m.m[15] * v.w
+		);
+}
+
+vec3f operator*(const vec3f& v, const mat33& m)
+{
+	return vec3f(
+		m.m[0] * v.x + m.m[1] * v.y + m.m[2] * v.z,
+		m.m[3] * v.x + m.m[4] * v.y + m.m[5] * v.z,
+		m.m[6] * v.x + m.m[7] * v.y + m.m[8] * v.z
 		);
 }
 

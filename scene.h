@@ -55,7 +55,6 @@ private:
 	typedef std::map<std::string, VBOMesh*> Meshes;
 	
 	Meshes meshes;
-	Objects objects;
 	std::vector<Light> lights;
 	bool useLights;
 	bool hasInit;
@@ -149,6 +148,7 @@ protected:
 	virtual void display();
 	bool getMesh(std::string name, VBOMesh*& mesh);
 public:
+	Objects objects;
 	bool forceDoubleSided;
 	Scene();
 	virtual ~Scene();
