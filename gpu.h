@@ -49,7 +49,7 @@ struct RenderTarget : GPUObject
 	int samples;
 	GLuint format;
 	vec2i size;
-	int bytes;
+	size_t bytes;
 	RenderTarget(GLuint type = (GLuint)-1);
 	virtual bool resize(vec2i size) =0;
 	virtual bool release() =0;
@@ -63,7 +63,7 @@ protected:
 	Texture(GLuint texType) : RenderTarget(texType) {}
 	virtual bool setUniform(int exposeAs, Shader* program, const std::string& name) const;
 public:
-	void buffer(const void* data, int sizeCheck = 0); //must previously be resized!
+	void buffer(const void* data, size_t sizeCheck = 0); //must previously be resized!
 	virtual bool resize(vec2i size);
 	virtual bool release();
 	virtual void bind() const;
@@ -110,21 +110,21 @@ struct GPUBuffer : GPUObject, ShaderUniform
 {
 	std::tr1::shared_ptr<GLuint64> address;
 	GLenum access;
-	int dataSize;
+	size_t dataSize;
 	bool writeable;
 
 	GPUBuffer(GLenum type, GLenum access = GL_STATIC_DRAW, bool writeable = true);
 	void bind() const;
 	void unbind() const;
-	virtual bool resize(int bytes, bool force = true); //force can be disabled to ignore size reduction
+	virtual bool resize(size_t bytes, bool force = true); //force can be disabled to ignore size reduction
 	//NOTE: .buffer(...) will NOT reduce the memory. it will only increase if needed
-	void buffer(const void* data, int bytes, int byteOffset = 0);
+	void buffer(const void* data, size_t bytes, size_t byteOffset = 0);
 	void createImage(GLenum format);
 	void* map(bool read = true, bool write = true);
-	void* map(unsigned int offset, unsigned int size, bool read = true, bool write = true);
-	void copy(GPUBuffer* dest, int offsetFrom = 0, int offsetTo = 0, int size = -1); //size -1 defaults to size = dataSize
+	void* map(size_t offset, size_t size, bool read = true, bool write = true);
+	void copy(GPUBuffer* dest, size_t offsetFrom = 0, size_t offsetTo = 0, ptrdiff_t size = -1); //size -1 defaults to size = dataSize
 	bool unmap();
-	int size();
+	size_t size();
 	virtual bool release();
 protected:
 	virtual bool setUniform(int exposeAs, Shader* program, const std::string& name) const;
@@ -145,7 +145,7 @@ struct TextureBuffer : GPUBuffer
 	GLenum format;
 	GLuint texture;
 	TextureBuffer(GLenum fmt = GL_R32UI, GLenum access = GL_STATIC_DRAW, bool writeable = true);
-	virtual bool resize(int bytes, bool force = true); //force can be disabled to ignore size reduction
+	virtual bool resize(size_t bytes, bool force = true); //force can be disabled to ignore size reduction
 	virtual bool release();
 	bool setFormat(GLenum fmt);
 protected:

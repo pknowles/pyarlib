@@ -220,7 +220,7 @@ bool Texture::resize(vec2i size)
 	if (multisample)
 	{
 		CHECKERROR;
-		int newBytes = size.x * size.y * samples * bytesPerPixel(format);
+		size_t newBytes = (size_t)size.x * size.y * samples * bytesPerPixel(format);
 		totalTextureMemory += newBytes - bytes;
 		bytes = newBytes;
 		glTexImage2DMultisample(type, samples, format, size.x, size.y, GL_FALSE);
@@ -231,7 +231,7 @@ bool Texture::resize(vec2i size)
 	}
 	else
 	{
-		int newBytes = size.x * size.y * bytesPerPixel(format);
+		size_t newBytes = (size_t)size.x * size.y * bytesPerPixel(format);
 		totalTextureMemory += newBytes - bytes;
 		bytes = newBytes;
 		glTexImage2D(type, 0, format, size.x, size.y, 0, informat, GL_UNSIGNED_BYTE, NULL);
@@ -251,11 +251,11 @@ size_t Texture::memoryUsage()
 		return size.x * size.y * bytesPerPixel(format);
 }
 
-void Texture::buffer(const void* data, int sizeCheck)
+void Texture::buffer(const void* data, size_t sizeCheck)
 {
 	if (sizeCheck > 0)
 	{
-		int allocated = size.x * size.y * bytesPerPixel(format);
+		size_t allocated = (size_t)size.x * size.y * bytesPerPixel(format);
 		if (sizeCheck != allocated)
 		{
 			printf("Error: Texture::buffer(%i bytes) but %i allocated\n", sizeCheck, allocated);
@@ -381,9 +381,9 @@ void Texture2D::randomize()
 	assert(!multisample);
 	int cpp = channelsPerPixel(format);
 	GLenum informat = defaultFormat(cpp);
-	int n = size.x * size.y * cpp;
+	size_t n = (size_t)size.x * size.y * cpp;
 	char* dat = new char[n];
-	for (int i = 0; i < n; ++i)
+	for (size_t i = 0; i < n; ++i)
 		dat[i] = rand() % 256;
 	bind();
 	//WARNING: could throw off texture memory usage calculations if size has changed outside resize()
@@ -427,7 +427,7 @@ bool Texture3D::resize(vec3i size)
 		glGenTextures(1, &object);
 	bind();
 	applyAttribs(type);
-	int newBytes = size.x * size.y * layers * bytesPerPixel(format);
+	size_t newBytes = (size_t)size.x * size.y * layers * bytesPerPixel(format);
 	totalTextureMemory += newBytes - bytes;
 	bytes = newBytes;
 	glTexImage3D(type, 0, format, size.x, size.y, layers, 0, informat, GL_UNSIGNED_BYTE, NULL);
@@ -451,9 +451,9 @@ void Texture3D::randomize()
 	assert(!multisample);
 	int cpp = channelsPerPixel(format);
 	GLenum informat = defaultFormat(cpp);
-	int n = size.x * size.y * layers * cpp;
+	size_t n = (size_t)size.x * size.y * layers * cpp;
 	char* dat = new char[n];
-	for (int i = 0; i < n; ++i)
+	for (size_t i = 0; i < n; ++i)
 		dat[i] = rand() % 256;
 	bind();
 	glTexImage3D(type, 0, format, size.x, size.y, layers, 0, informat, GL_UNSIGNED_BYTE, dat);
@@ -498,10 +498,10 @@ bool TextureCubeMap::resize(vec2i size)
 
 	glBindTexture(type, object);
 	applyAttribs(type);
-	int newBytes = size.x * size.y * 6 * bytesPerPixel(format);
+	size_t newBytes = (size_t)size.x * size.y * 6 * bytesPerPixel(format);
 	totalTextureMemory += newBytes - bytes;
 	bytes = newBytes;
-	for (int i = 0; i < 6; ++i)
+	for (size_t i = 0; i < 6; ++i)
 	{
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, size.x, size.y, 0, informat, GL_UNSIGNED_BYTE, NULL);
 	}
@@ -542,14 +542,14 @@ bool RenderBuffer::resize(vec2i size)
 	bind();
 	if (multisample)
 	{
-		int newBytes = size.x * size.y * samples * bytesPerPixel(format);
+		size_t newBytes = (size_t)size.x * size.y * samples * bytesPerPixel(format);
 		totalTextureMemory += newBytes - bytes; //FIXME: not sure if this should be included in texture memory.
 		bytes = newBytes;
 		glRenderbufferStorageMultisample(type, samples, format, size.x, size.y);
 	}
 	else
 	{
-		int newBytes = size.x * size.y * bytesPerPixel(format);
+		size_t newBytes = (size_t)size.x * size.y * bytesPerPixel(format);
 		totalTextureMemory += newBytes - bytes; //FIXME: not sure if this should be included in texture memory.
 		bytes = newBytes;
 		glRenderbufferStorage(type, format, size.x, size.y);
@@ -596,7 +596,7 @@ void GPUBuffer::unbind() const
 {
 	glBindBuffer(type, 0);
 }
-bool GPUBuffer::resize(int bytes, bool force)
+bool GPUBuffer::resize(size_t bytes, bool force)
 {
 	//NOTE: without force, buffers will ignore size reduction in favor of speed
 	if (dataSize == bytes || (!force && bytes < dataSize))
@@ -636,9 +636,9 @@ bool GPUBuffer::resize(int bytes, bool force)
 	}
 	return true;
 }
-void GPUBuffer::buffer(const void* data, int bytes, int byteOffset)
+void GPUBuffer::buffer(const void* data, size_t bytes, size_t byteOffset)
 {
-	int maxSize = bytes + byteOffset;
+	size_t maxSize = bytes + byteOffset;
 	if (dataSize < maxSize)
 		resize(maxSize);
 		
@@ -661,7 +661,7 @@ void* GPUBuffer::map(bool read, bool write)
 	unbind();
 	return ptr;
 }
-void* GPUBuffer::map(unsigned int offset, unsigned int size, bool read, bool write)
+void* GPUBuffer::map(size_t offset, size_t size, bool read, bool write)
 {
 	if (!dataSize)
 		return NULL;
@@ -680,7 +680,7 @@ bool GPUBuffer::unmap()
 	unbind();
 	return ok;
 }
-void GPUBuffer::copy(GPUBuffer* dest, int offsetFrom, int offsetTo, int size)
+void GPUBuffer::copy(GPUBuffer* dest, size_t offsetFrom, size_t offsetTo, ptrdiff_t size)
 {
 	if (size < 0)
 		size = dataSize;
@@ -691,7 +691,7 @@ void GPUBuffer::copy(GPUBuffer* dest, int offsetFrom, int offsetTo, int size)
 	glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, offsetFrom, offsetTo, size);
 	//FIXME: ok to leave these bound?
 }
-int GPUBuffer::size()
+size_t GPUBuffer::size()
 {
 	return dataSize;
 }
@@ -749,7 +749,7 @@ TextureBuffer::TextureBuffer(GLenum fmt, GLenum access, bool writeable) : GPUBuf
 	texture = 0;
 }
 
-bool TextureBuffer::resize(int bytes, bool force)
+bool TextureBuffer::resize(size_t bytes, bool force)
 {
 	bool textureCreated = false;
 	bool bufferResized = GPUBuffer::resize(bytes, force);
