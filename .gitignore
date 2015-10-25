@@ -1,2 +1,8 @@
 vec/vec.cpp
 vec/vec.h
+vs/ipch/
+vs/Debug*
+vs/Release*
+*.sdf
+*.opensdf
+
