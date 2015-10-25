@@ -12,6 +12,10 @@
 #include "vec.h"
 #include "camera.h"
 
+//uugh http://stackoverflow.com/questions/8948493/visual-studio-doesnt-allow-me-to-use-certain-variable-names
+#undef far
+#undef near
+
 struct VBOMesh;
 class Shader;
 

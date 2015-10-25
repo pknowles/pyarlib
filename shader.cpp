@@ -260,7 +260,7 @@ void Shader::load(string vert, string frag, string geom)
 	//generate a name for the shader if none exists
 	if (pname.size() == 0)
 	{
-		int i = frag.rfind(".");
+		int i = (int)frag.rfind(".");
 		if (i > 0)
 			pname = frag.substr(0, i);
 		else
@@ -536,7 +536,7 @@ bool Shader::reload()
 			}
 		}
 	
-		defines["HAS_GEOMETRY"] = intToString(geom.size());
+		defines["HAS_GEOMETRY"] = intToString((int)geom.size());
 	
 		ok = ok && build.compile(vert, GL_VERTEX_SHADER, &defines, &errorStr);
 		ok = ok && build.compile(frag, GL_FRAGMENT_SHADER, &defines, &errorStr);

@@ -91,7 +91,7 @@ Jeltz::Jeltz(const char* name)
 	hasResizedNF = true;
 	hasInit = false;
 	forceNextDraw = false;
-	int len = strlen(name);
+	int len = (int)strlen(name);
 	windowTitle = new char[len+1];
 	memcpy(windowTitle, name, len+1);
 	running = false;
@@ -464,7 +464,7 @@ bool Jeltz::init()
 	for (size_t d = 0; d < displays.size(); ++d)
 	{
 		SDL_Rect r;
-		SDL_GetDisplayBounds(d, &r);
+		SDL_GetDisplayBounds((int)d, &r);
 		displays[d].position = vec2i(r.x, r.y);
 		displays[d].size = vec2i(r.w, r.h);
 	}

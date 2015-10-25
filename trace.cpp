@@ -106,7 +106,7 @@ vec4f TraceScene::texelFetch(QI::Image* img, vec2i pos)
 vec4f TraceScene::texture2D(MaterialTexture* texture, vec2f pos, int mipmap)
 {
 	if (mipmap >= (int)texture->mipmaps.size())
-		mipmap = texture->mipmaps.size() - 1;
+		mipmap = (int)texture->mipmaps.size() - 1;
 	
 	assert(mipmap >= 0);
 	
@@ -612,7 +612,7 @@ int TraceScene::rbuild(int depth, std::vector<SAHTriangle>& T, std::vector<SAHEv
 	if (treeDepth < depth)
 		treeDepth = depth;
 
-	int nodeindex = tree.size();
+	int nodeindex = (int)tree.size();
 	tree.push_back(Node());
 	//tree[nodeindex].debug = voxel;
 	
@@ -623,7 +623,7 @@ int TraceScene::rbuild(int depth, std::vector<SAHTriangle>& T, std::vector<SAHEv
 	SAHSplit split;
 	if (!leaf)
 	{
-		findSplit(voxel, E, T.size(), split);
+		findSplit(voxel, E, (int)T.size(), split);
 		if (split.cost >= intersectCost * T.size())
 			leaf = true;
 	}
@@ -634,10 +634,10 @@ int TraceScene::rbuild(int depth, std::vector<SAHTriangle>& T, std::vector<SAHEv
 	if (leaf)
 	{
 		tree[nodeindex].type = 3; /* leaf */
-		tree[nodeindex].a = triangles.size();
+		tree[nodeindex].a = (int)triangles.size();
 		for (int i = 0; i < (int)T.size(); ++i)
 			triangles.push_back(T[i].triangle);
-		tree[nodeindex].b = triangles.size();
+		tree[nodeindex].b = (int)triangles.size();
 	}
 	else
 	{
@@ -716,7 +716,7 @@ void TraceScene::build()
 	
 	printf("Building KD Tree\n");
 	
-	int totalTriangles = triangleData.size();
+	int totalTriangles = (int)triangleData.size();
 	
 	vector<SAHTriangle> T(totalTriangles);
 	vector<SAHEvent> E;
@@ -767,7 +767,7 @@ void TraceScene::build()
 		debugMesh->has[VBOMesh::VERTICES] = true;
 		debugMesh->has[VBOMesh::NORMALS] = true;
 		debugMesh->calcInternal();
-		debugMesh->numVertices = debugTriangles.size() / 2;
+		debugMesh->numVertices = (int)debugTriangles.size() / 2;
 		debugMesh->uninterleave(false);
 		debugMesh->data = NULL;
 		debugMesh->interleave();
@@ -1615,9 +1615,9 @@ void TraceScene::addMesh(VBOMesh* mesh, mat44 transform)
 	bool hasTexCoords = mesh->has[VBOMesh::TEXCOORDS];
 	bool hasTangents = mesh->has[VBOMesh::TANGENTS];
 	
-	int offset = triangleData.size();
-	int matOffset = materials.size();
-	int vertOffset = vertexData.size();
+	int offset = (int)triangleData.size();
+	int matOffset = (int)materials.size();
+	int vertOffset = (int)vertexData.size();
 	
 	//make some more room for this mesh's triangles
 	int numTriangles = mesh->numIndices / 3;
@@ -2087,7 +2087,7 @@ void TraceScene::run()
 			jobs.push(job);
 		}
 	}
-	totalJobs = jobs.size();
+	totalJobs = (int)jobs.size();
 	
 	//must not have threads already running
 	assert(threads.size() == 0);

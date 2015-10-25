@@ -320,7 +320,7 @@ void NineBoxPool::draw(const mat44& transform)
 		shader.set("tex", 0);
 
 		shader.set("test", 0);
-		int numVerts = geometry.size() / sizeof(NineBoxVerts::Vert);
+		int numVerts = (int)geometry.size() / sizeof(NineBoxVerts::Vert);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, numVerts);
 		
 		#if 0

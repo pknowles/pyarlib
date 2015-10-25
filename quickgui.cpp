@@ -121,7 +121,7 @@ void Widget::loadImages(std::string mapfile)
 	
 	//extract base path from the filename (paths will be relative)
 	std::string base;
-	int b = mapfile.find_last_of("/");
+	int b = (int)mapfile.find_last_of("/");
 	if (b > 0)
 		base = mapfile.substr(0, b+1);
 	
@@ -1218,7 +1218,7 @@ Widget* DropDown::operator[](int i)
 }
 int DropDown::size()
 {
-	return dropListFrame.getChildren().size();
+	return (int)dropListFrame.getChildren().size();
 }
 
 DropSelect::DropSelect(const char* t) : DropDown(t)

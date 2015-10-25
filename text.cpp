@@ -47,7 +47,7 @@ Font::Font(std::string file, int pt)
 	face = NULL;
 
 	const std::string& buffer = FontManager::getSingleton().getFontFile(file);
-	int error = FT_New_Memory_Face(FontManager::getSingleton().library, (const FT_Byte*)buffer.c_str(), buffer.size(), 0, &face);
+	int error = FT_New_Memory_Face(FontManager::getSingleton().library, (const FT_Byte*)buffer.c_str(), (int)buffer.size(), 0, &face);
 	if (error == FT_Err_Unknown_File_Format)
 	{
 		cout << "Error: Unknown font format \"" << file << "\"." << endl;
@@ -475,7 +475,7 @@ void Text::draw(mat44 projection)
 		chars = new VertexBuffer();
 		
 	//upload text string to GPU
-	int datSize = charString.size() * sizeof(CharInfo);
+	int datSize = (int)charString.size() * sizeof(CharInfo);
 	if (datSize)
 	{
 		const CharInfo& first = *charString.begin(); //lol

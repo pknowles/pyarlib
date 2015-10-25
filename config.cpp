@@ -54,7 +54,7 @@ Config::Config()
 	while (getline(ifile, line))
 	{
 		//extract key/value lines
-		int p = line.find_first_of(":");
+		int p = (int)line.find_first_of(":");
 		if (p < 0)
 			continue;
 
@@ -65,7 +65,7 @@ Config::Config()
 		//strip whitespace AND STUPID WINDOWS CARRIAGE RETURNS
 		while (p < (int)line.size() && line[p] == ' ')
 			++p;
-		int e = line.size() - 1;
+		int e = (int)line.size() - 1;
 		while (line[e] == ' ' || line[e] == '\r')
 			--e;
 		line = line.substr(p, e - p + 1);

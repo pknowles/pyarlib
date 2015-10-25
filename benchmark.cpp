@@ -197,7 +197,7 @@ void Benchmark::Test::addConstant(std::string name, std::string a)
 void Benchmark::Test::addVariable(Iterator& it, std::string name, int a, int b, int step)
 {
 	assert(varMap.find(name) == varMap.end());
-	int varID = vars.size();
+	int varID = (int)vars.size();
 	varMap[name] = varID;
 	vars.push_back(Variable(name, a, b, step));
 	if (vars.back().size())
@@ -209,9 +209,9 @@ void Benchmark::Test::addVariable(Iterator& it, std::string name, int a, int b, 
 void Benchmark::Test::addVariable(Iterator& it, std::string name, std::vector<std::string> enumNames)
 {
 	assert(varMap.find(name) == varMap.end());
-	int varID = vars.size();
+	int varID = (int)vars.size();
 	varMap[name] = varID;
-	vars.push_back(Variable(name, 0, enumNames.size()-1, 1)); //NOTE: -1 because the final value is included
+	vars.push_back(Variable(name, 0, (int)enumNames.size()-1, 1)); //NOTE: -1 because the final value is included
 	//std::copy(enumNames.begin(), enumNames.end(), vars.back().enumVals.begin());
 	bool allFloat = true;
 	bool allInt = true;
@@ -232,12 +232,12 @@ void Benchmark::Test::addVariable(Iterator& it, std::string name, std::vector<st
 	else if (allFloat)
 	{
 		for (size_t i = 0; i < enumNames.size(); ++i)
-			vars.back().enumVals.push_back(Value(i, stringToFloat(enumNames[i])));
+			vars.back().enumVals.push_back(Value((int)i, stringToFloat(enumNames[i])));
 	}
 	else
 	{
 		for (size_t i = 0; i < enumNames.size(); ++i)
-			vars.back().enumVals.push_back(Value(i, enumNames[i]));
+			vars.back().enumVals.push_back(Value((int)i, enumNames[i]));
 	}
 	if (vars.back().size())
 	{
@@ -250,7 +250,7 @@ void Benchmark::Test::addVariable(std::string name, int a, int b, int step)
 	if (b != a)
 	{
 		iterators.push_back(Iterator(vars));
-		iterators.back().index = iterators.size()-1;
+		iterators.back().index = (int)iterators.size()-1;
 		addVariable(iterators.back(), name, a, b, step);
 	}
 	else
@@ -264,7 +264,7 @@ void Benchmark::Test::addVariable(std::string name, std::vector<std::string> enu
 	if (enumNames.size() > 1)
 	{
 		iterators.push_back(Iterator(vars));
-		iterators.back().index = iterators.size()-1;
+		iterators.back().index = (int)iterators.size()-1;
 		addVariable(iterators.back(), name, enumNames);
 	}
 	else
@@ -1019,7 +1019,7 @@ void Benchmark::load(std::string testsFile)
 				
 				string line;
 				Iterator it(test->vars);
-				it.index = test->iterators.size()-1;
+				it.index = (int)test->iterators.size()-1;
 				stringstream syncvals(sync.text().get());
 				while (getline(syncvals, line))
 				{

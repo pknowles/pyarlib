@@ -158,7 +158,7 @@ Scene::~Scene()
 }
 int Scene::getNumFlythroughs()
 {
-	return flythroughs.size();
+	return (int)flythroughs.size();
 }
 void Scene::setFlythrough(int i)
 {
@@ -532,7 +532,7 @@ void Scene::loadFlythrough(pugi::xml_node* node, std::string srcfilename, std::s
 	dynamic_cast<QG::Slider*>(guiElements["flythrough"])->upper = flythroughs.size() - 1;
 	if (flythroughs.size() == 1)
 		setFlythrough(0);
-	computeFlythroughDistance(flythroughs.size()-1);
+	computeFlythroughDistance((int)flythroughs.size() - 1);
 	
 	/*
 	string speedStr = flythrough.attribute("speed").value();

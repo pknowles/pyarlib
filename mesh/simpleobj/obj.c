@@ -189,7 +189,7 @@ float readTokFloat(char** tmp, int* warn)
 //removes whitespace and newlines at end of string (replaces with \0)
 void trimRight(char* str)
 {
-	int i = strlen(str);
+	int i = (int)strlen(str);
 	char* c;
 	for (c = str + i - 1; c > str; --c)
 		if (*c != ' ' && *c != '\r' && *c != '\n' && *c != '\t')

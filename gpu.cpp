@@ -503,7 +503,7 @@ bool TextureCubeMap::resize(vec2i size)
 	bytes = newBytes;
 	for (size_t i = 0; i < 6; ++i)
 	{
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, size.x, size.y, 0, informat, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + (int)i, 0, format, size.x, size.y, 0, informat, GL_UNSIGNED_BYTE, NULL);
 	}
 	glBindTexture(type, 0);
 	this->size = size;

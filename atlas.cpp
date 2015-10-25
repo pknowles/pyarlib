@@ -139,7 +139,7 @@ void TextureAtlas::upload()
 	vec2f fsize(size);
 	for (int i = 0; i < (int)sources.size(); ++i)
 	{
-		texMap[sources[i].name] = textures.size();
+		texMap[sources[i].name] = (int)textures.size();
 		
 		Tex t;
 		t.size = sources[i].size;

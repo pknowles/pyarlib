@@ -86,7 +86,7 @@ void Immediate::vertex(vec3f p)
 	if (pretransform)
 		p = *this * p;
 	v.pos = p;
-	indices[currentType].push_back(verts.size());
+	indices[currentType].push_back((unsigned int)verts.size());
 	verts.push_back(v);
 	
 	assert(verts.size() < 1000); //guessing flush() or clear() is never called
@@ -113,7 +113,7 @@ void Immediate::draw()
 	//count indices from all primitives to resize buffer
 	int total = 0;
 	for (int i = 0; i < NUM_PRIMITIVE_TYPES; ++i)
-		total += indices[i].size();
+		total += (int)indices[i].size();
 	
 	bufferIndices.resize(total * sizeof(unsigned int), false);
 	
@@ -126,7 +126,7 @@ void Immediate::draw()
 		{
 			memcpy(indexDat + offset, &indices[i][0], sizeof(unsigned int) * indices[i].size());
 		}
-		offset += indices[i].size();
+		offset += (int)indices[i].size();
 	}
 	bufferIndices.unmap();
 	
@@ -173,8 +173,8 @@ void Immediate::draw()
 			if (indices[i].size())
 			{
 				//draw
-				glDrawElements(primEnums[i], indices[i].size()-1, GL_UNSIGNED_INT, (void*)(offset * sizeof(unsigned int)));
-				offset += indices[i].size();
+				glDrawElements(primEnums[i], (int)indices[i].size() - 1, GL_UNSIGNED_INT, (void*)(offset * sizeof(unsigned int)));
+				offset += (int)indices[i].size();
 			}
 		}
 

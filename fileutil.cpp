@@ -57,7 +57,7 @@ std::string basefilepath(std::string filename)
 }
 std::string fileExtension(std::string filename)
 {
-	int i = filename.find_last_of(".");
+	int i = (int)filename.find_last_of(".");
 	if (i > 0)
 		return filename.substr(i+1);
 	return "";
@@ -153,7 +153,7 @@ bool readUncomment(std::istream& stream, std::string& line)
 	//if currently within a block/c-style comment
 	if (commentBlock)
 	{
-		int bcomment = line.find("*/");
+		int bcomment = (int)line.find("*/");
 		if (bcomment < 0)
 		{
 			line = "\n";
@@ -167,22 +167,22 @@ bool readUncomment(std::istream& stream, std::string& line)
 	//remove single line block/c-style comments
 	while (true)
 	{
-		int first = line.find("/*");
+		int first = (int)line.find("/*");
 		if (first < 0) break;
-		int second = line.find("*/", first);
+		int second = (int)line.find("*/", first);
 		if (second < 0) break;
 		line = line.substr(0, first) + line.substr(second+2);
 	}
 
 	//remove "//" comments
-	int lcomment = line.find("//");
+	int lcomment = (int)line.find("//");
 	if (lcomment >= 0)
 	{
 		line = line.substr(0, lcomment);
 	}
 	
 	//check for multiline block comments
-	int bcomment = line.find("/*");
+	int bcomment = (int)line.find("/*");
 	if (bcomment >= 0)
 	{
 		line = line.substr(0, bcomment);

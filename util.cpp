@@ -439,7 +439,7 @@ inline void poisson2D(std::vector<vec2f>& list, float rmin, float rdisc, bool sq
 	
 	list.push_back(randomInCircle(rmin * 0.5f));
 	//list.push_back(vec2i(0.0f)); //always start with center
-	grid[(int)((list.back().y+rdisc)/cell) * dim + (int)((list.back().x+rdisc)/cell)] = list.size()-1;
+	grid[(int)((list.back().y + rdisc) / cell) * dim + (int)((list.back().x + rdisc) / cell)] = (int)list.size() - 1;
 	active.push_back(list.back());
 	
 	while (active.size())
@@ -493,7 +493,7 @@ inline void poisson2D(std::vector<vec2f>& list, float rmin, float rdisc, bool sq
 		else
 		{
 			list.push_back(bestPos);
-			grid[(int)((list.back().y+rdisc)/cell) * dim + (int)((list.back().x+rdisc)/cell)] = list.size()-1;
+			grid[(int)((list.back().y + rdisc) / cell) * dim + (int)((list.back().x + rdisc) / cell)] = (int)list.size() - 1;
 			active.push_back(list.back());
 		}
 	}

@@ -36,7 +36,7 @@ const char* loadResource(const char* name)
 	//std::string strName(name);
 	//std::transform(strName.begin(), strName.end(), strName.begin(), std::toupper); 
 	WCHAR wname[64];
-	int l = MultiByteToWideChar(0, 0, name, strlen(name), wname, 63);
+	int l = MultiByteToWideChar(0, 0, name, (int)strlen(name), wname, 63);
 	wname[l] = '\0';
 
 	//more :(
@@ -66,12 +66,12 @@ int loadResourceLen(const char* name)
 		std::map<std::string, std::string>::iterator it;
 		it = nullTerminated->find(name);
 		if (it != nullTerminated->end())
-			return it->second.size();
+			return (int)it->second.size();
 	}
 
 	loadResource(name);
 
-	return (*nullTerminated)[name].size();
+	return (int)(*nullTerminated)[name].size();
 }
 
 #else

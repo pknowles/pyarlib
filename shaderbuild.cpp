@@ -94,7 +94,7 @@ std::string printPath(std::vector<std::string> path)
 	if (path.size() > 1)
 	{
 		ret += "Included from:\n";
-		for (int i = path.size() - 2; i >= 0; --i)
+		for (int i = (int)path.size() - 2; i >= 0; --i)
 			ret += "\t" + path[i] + "\n";
 	}
 	return ret;
@@ -185,7 +185,7 @@ void ShaderBuild::parseLog(std::string* errStr, std::string log, int baseFile, b
 				filenum = baseFile;
 			
 			//extract error message
-			end = line.find(":", end);
+			end = (int)line.find(":", end);
 			std::string errormsg;
 			if (end >= 0)
 				errormsg = line.substr(end + 1);
@@ -201,7 +201,7 @@ void ShaderBuild::parseLog(std::string* errStr, std::string log, int baseFile, b
 			if (readLineNumbers && linenum >= 0) line += intToString(linenum) + ":";
 			
 			//if both are available and valid, attempt to include the source line from the file
-			int tabw = line.size();
+			int tabw = (int)line.size();
 			std::string faultline;
 			if (filenum >= 0 && linenum >= 0 && filenum < (int)allfilebits.size())
 			{
@@ -246,15 +246,15 @@ void ShaderBuild::parseLog(std::string* errStr, std::string log, int baseFile, b
 
 bool ShaderBuild::parse(std::string file, FileBits& sourceBits, Defines& defs, std::vector<std::string> path)
 {
-	int fileBitStart = sourceBits.size();
+	int fileBitStart = (int)sourceBits.size();
 	
 	//maintain include stack
 	path.push_back(file);
 
 	//detect infinite include
-	for (int i = path.size() - 1; i >= 0; --i)
+	for (int i = (int)path.size() - 1; i >= 0; --i)
 	{
-		int f = path[i].find(":");
+		int f = (int)path[i].find(":");
 		if (f > 0 && path[i].substr(0,f) == file)
 		{
 			std::cout << printPath(path);
@@ -343,7 +343,7 @@ bool ShaderBuild::parse(std::string file, FileBits& sourceBits, Defines& defs, s
 			if (include != "<none>") //Special name to ignore the include
 			{
 				//add current bit
-				int bitIndex = allfilebits.size();
+				int bitIndex = (int)allfilebits.size();
 				if (sourceBits.size() > 0) //ATI doesn't like #line before #version
 					bit.bit = "#line " + intToString(bit.startLine+1) + " " + intToString(bitIndex) + "\n" + bit.bit;
 				sourceBits.push_back(bitIndex);
@@ -396,7 +396,7 @@ bool ShaderBuild::parse(std::string file, FileBits& sourceBits, Defines& defs, s
 				}
 			
 				//this really shouldn't be needed but line numbers are inconsistent after the #version line
-				int bitIndex = allfilebits.size();
+				int bitIndex = (int)allfilebits.size();
 				bit.bit += "#line " + intToString(linenum+1) + " " + intToString(bitIndex) + "\n";
 				
 				if (!versionLine)
@@ -410,7 +410,7 @@ bool ShaderBuild::parse(std::string file, FileBits& sourceBits, Defines& defs, s
 	}
 	
 	//add last bit
-	int bitIndex = allfilebits.size();
+	int bitIndex = (int)allfilebits.size();
 	if (sourceBits.size() > 0) //ATI doesn't like #line before #version
 		bit.bit = "#line " + intToString(bit.startLine+1) + " " + intToString(bitIndex) + "\n" + bit.bit;
 	sourceBits.push_back(bitIndex);
@@ -442,7 +442,7 @@ bool ShaderBuild::compile(std::string file, GLenum type, Defines* defs, std::str
 		return false;
 	
 	//parse the file (including #includes)
-	int numFileBitsBefore = allfilebits.size();
+	int numFileBitsBefore = (int)allfilebits.size();
 	objects[type] = ShaderSource();
 	objects[type].name = file;
 
@@ -479,7 +479,7 @@ bool ShaderBuild::compile(std::string file, GLenum type, Defines* defs, std::str
 			while (getline(filebit, line))
 			{
 				int s = 0;
-				while((s = line.find("\t", s)) > -1) {line.replace(s, 1, "    "); s += 4;}
+				while ((s = (int)line.find("\t", s)) > -1) { line.replace(s, 1, "    "); s += 4; }
 				std::replace(line.begin(), line.end(), '\r', '@');
 				std::cout << std::setw(4) << linenum++ << "|" << line << "$" << std::endl;
 			}
@@ -493,12 +493,12 @@ bool ShaderBuild::compile(std::string file, GLenum type, Defines* defs, std::str
 	{
 		int b = objects[type].source[i];
 		strings.push_back(allfilebits[b].bit.c_str());
-		sizes.push_back(allfilebits[b].bit.size());
+		sizes.push_back((int)allfilebits[b].bit.size());
 	}
 	
 	//create, copy source and compile shader
 	GLuint shader = glCreateShader(type);
-	glShaderSource(shader, strings.size(), &strings[0], &sizes[0]);
+	glShaderSource(shader, (int)strings.size(), &strings[0], &sizes[0]);
 	glCompileShader(shader);
 	
 	//retrieve and parse any errors
