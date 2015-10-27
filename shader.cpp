@@ -148,11 +148,13 @@ GLenum ShaderUniform::getType(Shader* program, const std::string& name) const
 		arrayBits[i] = arrayBits[i].substr(arrayBits[i].find_first_of("]")+1);
 	std::string searchName = pyarlib::join("[0]", arrayBits);
 	
+	/*
 	if (program->uniforms.find(searchName) == program->uniforms.end())
 	{
 		printf("Warning: %s is not a uniform in %s.\n", name.c_str(), program->name().c_str());
 		return 0;
 	}
+	*/
 	return program->uniforms[searchName].type;
 }
 
@@ -163,11 +165,13 @@ GLint ShaderUniform::getSize(Shader* program, const std::string& name) const
 		arrayBits[i] = arrayBits[i].substr(arrayBits[i].find_first_of("]")+1);
 	std::string searchName = pyarlib::join("[0]", arrayBits);
 	
+	/*
 	if (program->uniforms.find(searchName) == program->uniforms.end())
 	{
 		printf("Warning: %s is not a uniform in %s.\n", name.c_str(), program->name().c_str());
 		return 0;
 	}
+	*/
 	return program->uniforms[searchName].size;
 }
 
