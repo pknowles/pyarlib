@@ -93,6 +93,8 @@ std::string floatToString(float f, int precision);
 int stringToInt(const std::string& s);
 float stringToFloat(const std::string& s);
 
+vec3i sliceToIndices(std::string slice, int size); //i.e. slice = "-4:8:2", like python
+
 void mysleep(float seconds);
 
 template <class T> bool contains(const std::vector<T> &vec, const T &value)

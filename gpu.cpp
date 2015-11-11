@@ -258,7 +258,7 @@ void Texture::buffer(const void* data, size_t sizeCheck)
 		size_t allocated = (size_t)size.x * size.y * bytesPerPixel(format);
 		if (sizeCheck != allocated)
 		{
-			printf("Error: Texture::buffer(%i bytes) but %i allocated\n", sizeCheck, allocated);
+			printf("Error: Texture::buffer(%zu bytes) but %zu allocated\n", sizeCheck, allocated);
 			return;
 		}
 	}

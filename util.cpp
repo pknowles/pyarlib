@@ -1055,6 +1055,20 @@ float stringToFloat(const std::string& s)
 	return i;
 }
 
+vec3i sliceToIndices(std::string slice, int size)
+{
+	std::vector<std::string> range = pyarlib::split(slice, ":");
+	int rangeFrom = range.size() > 0 && range[0].size() ? stringToInt(range[0]) : 0;
+	int rangeTo = range.size() > 1 && range[1].size() ? stringToInt(range[1]) : size;
+	int rangeInc = range.size() > 2 && range[2].size() ? stringToInt(range[2]) : 1;
+	rangeFrom = myclamp(rangeFrom, 0, size);
+	rangeTo = myclamp(rangeTo, 0, size);
+	int dir = mysign(rangeTo - rangeFrom);
+	if ((rangeInc > 0) != (dir > 0))
+		rangeInc = dir;
+	return vec3i(rangeFrom, rangeTo, rangeInc);
+}
+
 void mysleep(float seconds)
 {
 #ifdef _WIN32

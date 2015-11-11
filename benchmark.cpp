@@ -1008,15 +1008,6 @@ void Benchmark::load(std::string testsFile)
 			if (std::string(testChild.name()) == "sync")
 			{
 				pugi::xml_node& sync(testChild);
-				
-				vector<string> range = pyarlib::split(sync.attribute("range").value(), ":");
-				int rangeFrom = range.size() > 0 ? stringToInt(range[0]) : -1;
-				int rangeTo = range.size() > 1 ? stringToInt(range[1]) : -1;
-				int rangeInc = range.size() > 2 ? stringToInt(range[2]) : 1;
-				if (rangeFrom < 0)
-					rangeFrom = 0;
-				rangeInc = mymax(1, rangeInc);
-				
 				string line;
 				Iterator it(test->vars);
 				it.index = (int)test->iterators.size()-1;
@@ -1039,13 +1030,14 @@ void Benchmark::load(std::string testsFile)
 					if (enums.size() > 1)
 					{
 						vector<string> rangedEnums;
-						//cout << "range " << rangeFrom << ":" << rangeTo << ":" << rangeInc << endl;
-						for (int i = rangeFrom; i < (rangeTo >= 0 ? rangeTo : (int)enums.size()); i += rangeInc)
+						vec3f iter = sliceToIndices(sync.attribute("range").value(), (int)enums.size());
+						//cout << "RANGE: " << sync.attribute("range").value() << ": " << iter << endl;
+						for (int i = iter.x; (iter.z > 0) ? (i < iter.y) : (i > iter.y); i += iter.z)
 						{
 							//cout << i << " ";
 							rangedEnums.push_back(enums[i]);
 						}
-						//cout << endl;
+						cout << endl;
 					
 						//cout << varname << ":" << pyarlib::join("#", enums) << endl;
 						test->addVariable(it, varname, rangedEnums);
