@@ -332,19 +332,6 @@ void Jeltz::processEvents()
 	keysUp.clear();
 	mouseDelta = vec2i(0);
 	mouseWheelDelta = vec2i(0);
-	
-
-	if (pendingMove.x >= 0)
-	{
-		doMove(pendingMove.x, pendingMove.y);
-		pendingMove = vec2i(-1);
-	}
-
-	if (pendingResize.x >= 0)
-	{
-		doResize(pendingResize.x, pendingResize.y);
-		pendingResize = vec2i(-1);
-	}
 
 	while (SDL_PollEvent(&event))
 	{
@@ -387,6 +374,19 @@ void Jeltz::processEvents()
    		default:
    			break;
 		}
+	}
+
+	//SDL resize events are delayed and not trusted. these trigger reshape events manually
+	if (pendingMove.x >= 0)
+	{
+		doMove(pendingMove.x, pendingMove.y);
+		pendingMove = vec2i(-1);
+	}
+
+	if (pendingResize.x >= 0)
+	{
+		doResize(pendingResize.x, pendingResize.y);
+		pendingResize = vec2i(-1);
 	}
 }
 void Jeltz::reshape(int w, int h)
@@ -864,10 +864,12 @@ void Jeltz::maximize()
 	vec2i biggestPos(0);
 	vec2i biggest(0);
 	for (size_t d = 0; d < displays.size(); ++d)
-	if (displays[d].size.size() > biggest.size())
 	{
-		biggestPos = displays[d].position;
-		biggest = displays[d].size;
+		if (displays[d].size.size() > biggest.size())
+		{
+			biggestPos = displays[d].position;
+			biggest = displays[d].size;
+		}
 	}
 	isBorderless = true;
 	move(biggestPos);
