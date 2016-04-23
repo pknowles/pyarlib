@@ -175,7 +175,7 @@ public:
 	void enableLighting(bool enable = true);
 	void setView(int i);
 	void setCamera(Camera* cam);
-	void load(std::string filename);
+	bool load(std::string filename);
 	void save(std::string filename);
 	void draw(Shader* shader, Camera* cam = NULL);
 	void draw();

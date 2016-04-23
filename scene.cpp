@@ -542,13 +542,15 @@ void Scene::loadFlythrough(pugi::xml_node* node, std::string srcfilename, std::s
 		f.time = stringToFloat(speedStr);
 	*/
 }
-void Scene::load(std::string filename)
+bool Scene::load(std::string filename)
 {
+	bool hasError = false;
+
 	if (!hasInit)
 		init();
 
 	if (filename == "" || sceneName == filename)
-		return;
+		return false;
 	currentView = "none";
 	sceneFilename = filename;
 	sceneName = filename;
@@ -570,7 +572,7 @@ void Scene::load(std::string filename)
 	if (!result || !doc.child("scene"))
 	{
 		cout << "Error: Could not open " << filename << endl;
-		return;
+		return false;
 	}
 	pugi::xml_node scene = doc.child("scene");
 	if (strlen(scene.attribute("name").value()))
@@ -604,6 +606,7 @@ void Scene::load(std::string filename)
 			cout << "LOADING: " << src << endl;
 			if (!mesh->load(src.c_str()))
 			{
+				hasError = true;
 				cout << "Error: Could not load mesh '" << src << "' in " << filename << endl;
 				continue;
 			}
@@ -806,6 +809,8 @@ void Scene::load(std::string filename)
 	for (Objects::iterator it = objects.begin(); it != objects.end(); ++it)
 		totalPolygons += it->second.mesh->numPolygons;
 	printf("TotalPolygons: %s = %i\n", sceneName.c_str(), totalPolygons);
+
+	return !hasError;
 }
 void Scene::save(std::string filename)
 {
